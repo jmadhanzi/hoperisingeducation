@@ -16,6 +16,7 @@ import Donate from "./pages/Donate";
 import GetInvolved from "./pages/GetInvolved";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
+import AdminDashboard from "./pages/AdminDashboard";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/get-involved" component={GetInvolved} />
       <Route path="/team" component={Team} />
       <Route path="/contact" component={Contact} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

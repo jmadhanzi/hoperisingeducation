@@ -21,3 +21,15 @@
 - [x] Embed component prominently on Donate page above the form
 - [x] Write vitest tests for the stats procedure
 - [x] Checkpoint and push to GitHub
+
+## Admin Dashboard
+
+- [x] Add adminProcedure guard (role === 'admin') to tRPC router
+- [x] Add admin.recentDonors procedure (last 50 donations with donor info, amount, status, date)
+- [x] Add admin.updateCampaignGoal procedure (update goalCents and deadline on fundraisingGoals)
+- [x] Add admin.campaignStats procedure (total raised, donor count, active campaign details)
+- [x] Build /admin route with role-gated access (redirect non-admins to home)
+- [x] Build AdminDashboard page: stats cards, recent donors table, campaign goal editor form
+- [x] Register /admin route in App.tsx
+- [x] Write vitest tests for admin procedures
+- [x] Checkpoint and push to GitHub
