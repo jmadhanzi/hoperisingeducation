@@ -33,3 +33,14 @@
 - [x] Register /admin route in App.tsx
 - [x] Write vitest tests for admin procedures
 - [x] Checkpoint and push to GitHub
+
+## Rich Donation Notifications
+
+- [x] Upgrade checkout.session.completed notification with donor name, email, amount, frequency, message
+- [x] Include live campaign totals (total raised, donor count, goal %, campaign title) in notification
+- [x] Add payment_intent.payment_failed notification with failure reason
+- [x] Add charge.refunded notification with refund amount and donor details
+- [x] Wrap all notifyOwner calls in try/catch so failures never break webhook response
+- [x] Add formatAmount() and getCampaignSummary() helpers to server/_core/index.ts
+- [x] All 23 vitest tests pass after upgrade
+- [x] Checkpoint and push to GitHub
