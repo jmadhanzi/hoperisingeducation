@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import FundraisingProgress from "@/components/FundraisingProgress";
 import Footer from "@/components/Footer";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -373,6 +374,9 @@ export default function Donate() {
 
             {/* ── SIDEBAR ── */}
             <div className="space-y-6">
+              {/* Live fundraising progress bar */}
+              <FundraisingProgress />
+
               {/* Impact breakdown */}
               <div className="bg-white rounded-2xl p-6 card-shadow">
                 <h3

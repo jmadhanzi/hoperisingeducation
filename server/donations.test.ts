@@ -122,3 +122,59 @@ describe("donations.myDonations", () => {
     });
   });
 });
+
+describe("donations.fundraisingStats", () => {
+  it("returns the expected shape with fallback defaults when DB is unavailable", async () => {
+    const caller = appRouter.createCaller(makePublicCtx());
+    const stats = await caller.donations.fundraisingStats();
+
+    // Shape assertions
+    expect(stats).toHaveProperty("campaignTitle");
+    expect(stats).toHaveProperty("campaignDescription");
+    expect(stats).toHaveProperty("goalCents");
+    expect(stats).toHaveProperty("raisedCents");
+    expect(stats).toHaveProperty("donorCount");
+    expect(stats).toHaveProperty("percentComplete");
+    expect(stats).toHaveProperty("daysLeft");
+    expect(stats).toHaveProperty("deadline");
+  });
+
+  it("returns zero raisedCents and donorCount when DB is unavailable", async () => {
+    const caller = appRouter.createCaller(makePublicCtx());
+    const stats = await caller.donations.fundraisingStats();
+
+    // DB is mocked as null, so aggregates should fall back to 0
+    expect(stats.raisedCents).toBe(0);
+    expect(stats.donorCount).toBe(0);
+  });
+
+  it("returns percentComplete between 0 and 100", async () => {
+    const caller = appRouter.createCaller(makePublicCtx());
+    const stats = await caller.donations.fundraisingStats();
+
+    expect(stats.percentComplete).toBeGreaterThanOrEqual(0);
+    expect(stats.percentComplete).toBeLessThanOrEqual(100);
+  });
+
+  it("returns a positive goalCents value", async () => {
+    const caller = appRouter.createCaller(makePublicCtx());
+    const stats = await caller.donations.fundraisingStats();
+
+    expect(stats.goalCents).toBeGreaterThan(0);
+  });
+
+  it("returns daysLeft as a non-negative number or null", async () => {
+    const caller = appRouter.createCaller(makePublicCtx());
+    const stats = await caller.donations.fundraisingStats();
+
+    if (stats.daysLeft !== null) {
+      expect(stats.daysLeft).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it("is accessible without authentication (public procedure)", async () => {
+    // Should not throw UNAUTHORIZED
+    const caller = appRouter.createCaller(makePublicCtx());
+    await expect(caller.donations.fundraisingStats()).resolves.toBeDefined();
+  });
+});

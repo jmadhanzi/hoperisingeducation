@@ -8,6 +8,13 @@
       "when": 1780759970800,
       "tag": "0000_misty_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1780760935099,
+      "tag": "0001_chunky_power_pack",
+      "breakpoints": true
     }
   ]
 }

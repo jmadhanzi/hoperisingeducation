@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sum, count, and } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "../db";
-import { donations } from "../../drizzle/schema";
+import { donations, fundraisingGoals } from "../../drizzle/schema";
 import Stripe from "stripe";
 import { stripe, DONATION_TIERS } from "../stripe";
 import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
@@ -44,11 +44,7 @@ export const donationsRouter = router({
               ],
             },
             ...(isRecurring
-              ? {
-                  recurring: {
-                    interval: "month",
-                  },
-                }
+              ? { recurring: { interval: "month" } }
               : {}),
           },
           quantity: 1,
@@ -72,7 +68,6 @@ export const donationsRouter = router({
         cancel_url: `${origin}/donate?cancelled=true`,
       });
 
-      // Create a pending donation record
       const db = await getDb();
       if (db) {
         await db.insert(donations).values({
@@ -112,4 +107,73 @@ export const donationsRouter = router({
    * Get donation tiers for display on the frontend.
    */
   tiers: publicProcedure.query(() => DONATION_TIERS),
+
+  /**
+   * Get live fundraising stats for the progress bar.
+   * Returns the active campaign goal, total raised (completed donations only),
+   * unique donor count, and days remaining.
+   * This is a public procedure — no login required.
+   */
+  fundraisingStats: publicProcedure.query(async () => {
+    const db = await getDb();
+
+    // ── Active campaign goal ──────────────────────────────────────────────
+    let goal = {
+      id: 1,
+      title: "Annual Education Fund 2026",
+      description:
+        "Help us provide school fees, meals, books, and mentorship for 500+ children in Zimbabwe this year.",
+      goalCents: 1_000_000, // $10,000 default
+      deadline: new Date("2026-12-31T23:59:59Z"),
+      isActive: true,
+    };
+
+    if (db) {
+      const [activeGoal] = await db
+        .select()
+        .from(fundraisingGoals)
+        .where(eq(fundraisingGoals.isActive, true))
+        .limit(1);
+      if (activeGoal) goal = activeGoal as typeof goal;
+    }
+
+    // ── Aggregate completed donations ─────────────────────────────────────
+    let raisedCents = 0;
+    let donorCount = 0;
+
+    if (db) {
+      const [agg] = await db
+        .select({
+          totalCents: sum(donations.amountCents),
+          donors: count(donations.id),
+        })
+        .from(donations)
+        .where(eq(donations.status, "completed"));
+
+      raisedCents = Number(agg?.totalCents ?? 0);
+      donorCount = Number(agg?.donors ?? 0);
+    }
+
+    // ── Days remaining ────────────────────────────────────────────────────
+    const now = Date.now();
+    const deadlineMs = goal.deadline ? new Date(goal.deadline).getTime() : null;
+    const daysLeft = deadlineMs
+      ? Math.max(0, Math.ceil((deadlineMs - now) / (1000 * 60 * 60 * 24)))
+      : null;
+
+    const percentComplete = goal.goalCents > 0
+      ? Math.min(100, Math.round((raisedCents / goal.goalCents) * 100))
+      : 0;
+
+    return {
+      campaignTitle: goal.title,
+      campaignDescription: goal.description ?? "",
+      goalCents: goal.goalCents,
+      raisedCents,
+      donorCount,
+      percentComplete,
+      daysLeft,
+      deadline: goal.deadline ? goal.deadline.toISOString() : null,
+    };
+  }),
 });
