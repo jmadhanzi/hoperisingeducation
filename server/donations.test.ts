@@ -121,6 +121,72 @@ describe("donations.myDonations", () => {
       code: "UNAUTHORIZED",
     });
   });
+
+  it("throws INTERNAL_SERVER_ERROR when DB is unavailable for authenticated user", async () => {
+    // DB is mocked as null — procedure should surface INTERNAL_SERVER_ERROR
+    const caller = appRouter.createCaller(makeAuthCtx());
+    await expect(caller.donations.myDonations()).rejects.toMatchObject({
+      code: "INTERNAL_SERVER_ERROR",
+    });
+  });
+
+  it("is only accessible to authenticated users (protectedProcedure)", async () => {
+    // Public caller must be rejected
+    const publicCaller = appRouter.createCaller(makePublicCtx());
+    await expect(publicCaller.donations.myDonations()).rejects.toThrow();
+
+    // Authenticated caller must not throw UNAUTHORIZED (may throw INTERNAL_SERVER_ERROR due to null DB)
+    const authCaller = appRouter.createCaller(makeAuthCtx());
+    try {
+      await authCaller.donations.myDonations();
+    } catch (err: unknown) {
+      const trpcErr = err as { code?: string };
+      expect(trpcErr.code).not.toBe("UNAUTHORIZED");
+    }
+  });
+
+  it("returns an array when DB returns rows (mocked DB with data)", async () => {
+    // Override the DB mock to return a fake donations array for this test
+    const { getDb } = await import("./db");
+    const mockDonations = [
+      {
+        id: 1,
+        stripeSessionId: "cs_test_abc",
+        stripePaymentIntentId: "pi_test_abc",
+        amountCents: 5000,
+        currency: "usd",
+        donorName: "Jane Donor",
+        donorEmail: "donor@example.com",
+        message: "Keep up the great work!",
+        isRecurring: false,
+        status: "completed",
+        userId: 42,
+        createdAt: new Date("2026-01-15T10:00:00Z"),
+        updatedAt: new Date("2026-01-15T10:00:00Z"),
+      },
+    ];
+
+    const mockDb = {
+      select: vi.fn().mockReturnValue({
+        from: vi.fn().mockReturnValue({
+          where: vi.fn().mockReturnValue({
+            orderBy: vi.fn().mockReturnValue({
+              limit: vi.fn().mockResolvedValue(mockDonations),
+            }),
+          }),
+        }),
+      }),
+    };
+    vi.mocked(getDb).mockResolvedValueOnce(mockDb as ReturnType<typeof mockDb.select>);
+
+    const caller = appRouter.createCaller(makeAuthCtx());
+    const result = await caller.donations.myDonations();
+
+    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveLength(1);
+    expect(result[0].amountCents).toBe(5000);
+    expect(result[0].donorName).toBe("Jane Donor");
+  });
 });
 
 describe("donations.fundraisingStats", () => {

@@ -44,3 +44,15 @@
 - [x] Add formatAmount() and getCampaignSummary() helpers to server/_core/index.ts
 - [x] All 23 vitest tests pass after upgrade
 - [x] Checkpoint and push to GitHub
+
+## My Donations Page (/my-donations)
+
+- [x] Add myDonations tRPC procedure (already exists — verify it returns all needed fields)
+- [x] Build MyDonations page: protected, redirects to login if unauthenticated
+- [x] Show summary header: total donated, donation count, monthly vs one-time breakdown
+- [x] Show sortable/filterable donations table: date, amount, frequency, status badge, message preview
+- [x] Show empty state when user has no donations yet with CTA to Donate page
+- [x] Add "My Donations" link to Navbar for logged-in users (desktop + mobile)
+- [x] Register /my-donations route in App.tsx
+- [x] Write vitest tests for myDonations procedure (success path + auth guard)
+- [x] Checkpoint and push to GitHub
