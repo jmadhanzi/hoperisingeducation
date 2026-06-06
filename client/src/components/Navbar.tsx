@@ -1,10 +1,12 @@
 /* Hope Rising Education — Navbar Component
  * Design: Sticky top nav, transparent-to-solid on scroll
  * Mobile: Hamburger menu with slide-down drawer
+ * Auth-aware: shows "My Donations" link for signed-in users
  */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Heart } from "lucide-react";
+import { Menu, X, Heart, LayoutList } from "lucide-react";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -20,6 +22,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -84,6 +87,20 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
+            {user && (
+              <Link
+                href="/my-donations"
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 ${
+                  location === "/my-donations"
+                    ? "text-[#EE701E]"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              >
+                <LayoutList className="w-4 h-4" />
+                My Donations
+              </Link>
+            )}
             <Link href="/donate" className="btn-primary text-xs py-2.5">
               Donate Now
             </Link>
@@ -120,6 +137,20 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
+            {user && (
+              <Link
+                href="/my-donations"
+                className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                  location === "/my-donations"
+                    ? "text-[#EE701E] bg-white/5"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              >
+                <LayoutList className="w-4 h-4" />
+                My Donations
+              </Link>
+            )}
             <div className="pt-3 border-t border-white/10 mt-2">
               <Link href="/donate" className="btn-primary block text-center text-xs py-3">
                 Donate Now

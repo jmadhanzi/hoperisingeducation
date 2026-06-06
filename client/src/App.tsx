@@ -17,6 +17,7 @@ import GetInvolved from "./pages/GetInvolved";
 import Team from "./pages/Team";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
+import MyDonations from "./pages/MyDonations";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/team" component={Team} />
       <Route path="/contact" component={Contact} />
       <Route path="/admin" component={AdminDashboard} />
+      <Route path="/my-donations" component={MyDonations} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
