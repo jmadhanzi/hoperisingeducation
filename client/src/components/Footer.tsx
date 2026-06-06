@@ -1,0 +1,145 @@
+/* Hope Rising Education — Footer Component
+ * Design: Dark navy background, orange accents, organized columns
+ */
+import { Link } from "wouter";
+import { Heart, MapPin, Mail, Phone, Facebook, Globe, Youtube } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#0D215C] text-white">
+      {/* Main Footer */}
+      <div className="container mx-auto py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand Column */}
+          <div className="lg:col-span-1">
+            <Link href="/" className="flex items-center gap-2 mb-4 group w-fit">
+              <div className="w-9 h-9 bg-[#EE701E] rounded-lg flex items-center justify-center">
+                <Heart className="w-5 h-5 text-white fill-white" />
+              </div>
+              <div>
+                <span className="font-extrabold text-lg leading-none text-white" style={{ fontFamily: "Manrope, sans-serif" }}>
+                  Hope Rising
+                </span>
+                <span className="block text-[10px] text-[#EE701E] tracking-widest uppercase leading-none" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                  Education
+                </span>
+              </div>
+            </Link>
+            <p className="text-white/70 text-sm leading-relaxed mb-5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Dedicated to improving educational outcomes for underserved children and families in Zimbabwe and beyond.
+            </p>
+            <div className="flex gap-3">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Facebook">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="YouTube">
+                <Youtube className="w-4 h-4" />
+              </a>
+              <a href="https://hoperisingeducationglobal.org" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Website">
+                <Globe className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 className="font-bold text-sm tracking-widest uppercase text-[#EE701E] mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Quick Links
+            </h4>
+            <ul className="space-y-2.5">
+              {[
+                { href: "/", label: "Home" },
+                { href: "/about", label: "About Us" },
+                { href: "/programs", label: "Programs" },
+                { href: "/impact", label: "Our Impact" },
+                { href: "/team", label: "Our Team" },
+                { href: "/get-involved", label: "Get Involved" },
+              ].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-white/70 hover:text-[#EE701E] text-sm transition-colors duration-150" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Programs */}
+          <div>
+            <h4 className="font-bold text-sm tracking-widest uppercase text-[#EE701E] mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Programs
+            </h4>
+            <ul className="space-y-2.5">
+              {[
+                "My Best Me Curriculum",
+                "School Fees Support",
+                "Tutoring & Mentorship",
+                "Nutrition & Meals",
+                "Hygiene & Supplies",
+                "Safe Learning Spaces",
+              ].map((item) => (
+                <li key={item}>
+                  <Link href="/programs" className="text-white/70 hover:text-[#EE701E] text-sm transition-colors duration-150" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="font-bold text-sm tracking-widest uppercase text-[#EE701E] mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Contact Us
+            </h4>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-4 h-4 text-[#EE701E] mt-0.5 shrink-0" />
+                <span className="text-white/70 text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                  Chompani Primary School P. 7053, Chiredzi, Zimbabwe
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-[#EE701E] shrink-0" />
+                <a href="mailto:info@hoperisingeducationglobal.org" className="text-white/70 hover:text-[#EE701E] text-sm transition-colors" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                  info@hoperisingeducationglobal.org
+                </a>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-[#EE701E] shrink-0" />
+                <span className="text-white/70 text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                  +263 776 129 568
+                </span>
+              </li>
+            </ul>
+            <div className="mt-5">
+              <Link href="/donate" className="btn-primary text-xs py-2.5 inline-block">
+                Donate Now
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-white/10">
+        <div className="container mx-auto py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-white/50 text-xs" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+            © 2024 Hope Rising Education. All rights reserved.
+          </p>
+          <div className="flex gap-5">
+            <Link href="/privacy" className="text-white/50 hover:text-white/80 text-xs transition-colors" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-white/50 hover:text-white/80 text-xs transition-colors" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Terms of Service
+            </Link>
+            <Link href="/contact" className="text-white/50 hover:text-white/80 text-xs transition-colors" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              FAQ
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
