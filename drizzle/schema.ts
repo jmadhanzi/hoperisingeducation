@@ -2,8 +2,6 @@ import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "d
 
 /**
  * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
  */
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -26,23 +24,15 @@ export type InsertUser = typeof users.$inferInsert;
  */
 export const donations = mysqlTable("donations", {
   id: int("id").autoincrement().primaryKey(),
-  /** Stripe PaymentIntent ID — primary reference for this transaction */
   stripePaymentIntentId: varchar("stripePaymentIntentId", { length: 255 }).unique(),
-  /** Stripe Checkout Session ID — used to look up session before intent is confirmed */
   stripeSessionId: varchar("stripeSessionId", { length: 255 }).unique(),
-  /** Amount in cents (e.g. 5000 = $50.00) */
   amountCents: int("amountCents").notNull(),
   currency: varchar("currency", { length: 3 }).notNull().default("usd"),
-  /** Donor display name — may differ from authenticated user name */
   donorName: varchar("donorName", { length: 255 }),
   donorEmail: varchar("donorEmail", { length: 320 }),
-  /** Optional message from the donor */
   message: text("message"),
-  /** Whether this is a recurring monthly donation */
   isRecurring: boolean("isRecurring").notNull().default(false),
-  /** pending | completed | failed | refunded */
   status: mysqlEnum("status", ["pending", "completed", "failed", "refunded"]).notNull().default("pending"),
-  /** Optional link to authenticated user */
   userId: int("userId"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -50,3 +40,26 @@ export const donations = mysqlTable("donations", {
 
 export type Donation = typeof donations.$inferSelect;
 export type InsertDonation = typeof donations.$inferInsert;
+
+/**
+ * Fundraising goals — configures the progress bar on the Donate page.
+ * Only one goal should have isActive = true at a time.
+ */
+export const fundraisingGoals = mysqlTable("fundraisingGoals", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Human-readable campaign title shown on the progress bar */
+  title: varchar("title", { length: 255 }).notNull(),
+  /** Campaign description shown beneath the title */
+  description: text("description"),
+  /** Fundraising target in cents (e.g. 1000000 = $10,000) */
+  goalCents: int("goalCents").notNull(),
+  /** Optional campaign deadline */
+  deadline: timestamp("deadline"),
+  /** Whether this campaign is currently shown on the Donate page */
+  isActive: boolean("isActive").notNull().default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type FundraisingGoal = typeof fundraisingGoals.$inferSelect;
+export type InsertFundraisingGoal = typeof fundraisingGoals.$inferInsert;
