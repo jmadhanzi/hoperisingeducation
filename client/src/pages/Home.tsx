@@ -1,0 +1,499 @@
+/* Hope Rising Education — Home Page
+ * Design: "Warm Authority" — hero with dark overlay, impact stats, program cards, CTA sections
+ */
+import { useEffect, useRef } from "react";
+import { Link } from "wouter";
+import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
+const DONATE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
+const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
+
+const stats = [
+  { value: "500+", label: "Children Supported", icon: Users },
+  { value: "12+", label: "Schools Reached", icon: GraduationCap },
+  { value: "3", label: "Countries Active", icon: Shield },
+  { value: "95%", label: "Attendance Improvement", icon: TrendingUp },
+];
+
+const programs = [
+  {
+    icon: BookOpen,
+    title: "My Best Me Curriculum",
+    desc: "A multimedia-rich, age-appropriate program focused on hope, resilience, psycho-social development, and emotional intelligence.",
+    color: "#EE701E",
+  },
+  {
+    icon: GraduationCap,
+    title: "School Fees & Supplies",
+    desc: "We cover school fees, uniforms, textbooks, and stationery so financial barriers never stand between a child and their education.",
+    color: "#0D215C",
+  },
+  {
+    icon: Users,
+    title: "Tutoring & Mentorship",
+    desc: "One-on-one and group tutoring sessions paired with dedicated mentors who guide children through academic and personal challenges.",
+    color: "#4BAF4F",
+  },
+  {
+    icon: Utensils,
+    title: "Nutrition & Meals",
+    desc: "Warm, nutritious meals provided daily to ensure children can focus on learning rather than hunger.",
+    color: "#EE701E",
+  },
+  {
+    icon: Heart,
+    title: "Psycho-Social Support",
+    desc: "Safe spaces and trained counselors help children process trauma, build resilience, and develop healthy peer relationships.",
+    color: "#0D215C",
+  },
+  {
+    icon: Shield,
+    title: "Safe Learning Environments",
+    desc: "We build and maintain safe, welcoming classrooms equipped with the tools children need to thrive academically.",
+    color: "#4BAF4F",
+  },
+];
+
+const projects = [
+  {
+    title: "Books for All",
+    date: "January 2026",
+    desc: "Delivering books and safe learning spaces to children across Chiredzi and Chipinge.",
+    goal: 5000,
+    raised: 3750,
+    img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80",
+  },
+  {
+    title: "Tools for Success",
+    date: "April 2025",
+    desc: "Providing every pencil, notebook, and eraser needed for a brighter future.",
+    goal: 2500,
+    raised: 1250,
+    img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80",
+  },
+  {
+    title: "Build a School",
+    date: "October 2025",
+    desc: "A bold effort to build a safe, welcoming school that will give local children reliable access to education.",
+    goal: 100000,
+    raised: 65000,
+    img: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80",
+  },
+];
+
+function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          let start = 0;
+          const duration = 1500;
+          const step = (timestamp: number) => {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(eased * target) + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target, suffix]);
+  return <span ref={ref}>0{suffix}</span>;
+}
+
+export default function Home() {
+  const revealRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = revealRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add("visible");
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+    el.querySelectorAll(".fade-up").forEach((e) => observer.observe(e));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="min-h-screen" ref={revealRef}>
+      <Navbar />
+
+      {/* ── HERO ── */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('${HERO_IMG}')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
+        <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
+          <p className="section-label text-[#EE701E] mb-4 fade-up stagger-1">
+            Thousands of children are waiting for help
+          </p>
+          <h1
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 fade-up stagger-2"
+            style={{ fontFamily: "Manrope, sans-serif", letterSpacing: "-0.02em" }}
+          >
+            Empowering{" "}
+            <span className="text-[#EE701E]">Children</span>
+            <br />
+            Through Education
+          </h1>
+          <p
+            className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 fade-up stagger-3"
+            style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+          >
+            Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center fade-up stagger-4">
+            <Link href="/donate" className="btn-primary text-sm py-4 px-8">
+              Donate Now
+            </Link>
+            <Link href="/programs" className="btn-outline-orange text-sm py-4 px-8 border-white text-white hover:bg-white hover:text-[#0D215C]">
+              Our Programs
+            </Link>
+          </div>
+        </div>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 animate-bounce">
+          <div className="w-0.5 h-8 bg-white/30 rounded-full" />
+        </div>
+      </section>
+
+      {/* ── IMPACT STATS ── */}
+      <section className="bg-[#0D215C] py-16 relative overflow-hidden">
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-[#EE701E]/10 rounded-full blur-3xl" />
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {stats.map(({ value, label, icon: Icon }, i) => {
+              const num = parseInt(value.replace(/\D/g, ""));
+              const suffix = value.replace(/\d/g, "");
+              return (
+                <div key={label} className={`text-center fade-up stagger-${i + 1}`}>
+                  <div className="w-12 h-12 bg-[#EE701E]/20 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Icon className="w-6 h-6 text-[#EE701E]" />
+                  </div>
+                  <div
+                    className="text-3xl md:text-4xl font-extrabold text-white mb-1"
+                    style={{ fontFamily: "Manrope, sans-serif" }}
+                  >
+                    <CountUp target={num} suffix={suffix} />
+                  </div>
+                  <p
+                    className="text-white/60 text-sm"
+                    style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                  >
+                    {label}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PROGRAMS ── */}
+      <section className="py-20 bg-[#F8F9FA]">
+        <div className="container mx-auto">
+          <div className="text-center mb-14 fade-up">
+            <p className="section-label">What We Do</p>
+            <span className="orange-underline mx-auto" />
+            <h2
+              className="text-3xl md:text-4xl font-extrabold text-[#0D215C]"
+              style={{ fontFamily: "Manrope, sans-serif" }}
+            >
+              Our Programs &amp; Services
+            </h2>
+            <p
+              className="text-[#584237] mt-4 max-w-2xl mx-auto"
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              Holistic support that addresses every barrier standing between a child and a quality education.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {programs.map(({ icon: Icon, title, desc, color }, i) => (
+              <div
+                key={title}
+                className={`bg-white rounded-2xl p-6 card-shadow hover:card-shadow-hover transition-all duration-300 hover:-translate-y-1 fade-up stagger-${(i % 3) + 1}`}
+              >
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                  style={{ backgroundColor: color + "20" }}
+                >
+                  <Icon className="w-6 h-6" style={{ color }} />
+                </div>
+                <h3
+                  className="font-bold text-lg text-[#0D215C] mb-2"
+                  style={{ fontFamily: "Manrope, sans-serif" }}
+                >
+                  {title}
+                </h3>
+                <p
+                  className="text-[#584237] text-sm leading-relaxed"
+                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                >
+                  {desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-10 fade-up">
+            <Link href="/programs" className="btn-navy inline-flex items-center gap-2">
+              View All Programs <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── RECENT PROJECTS ── */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-14 fade-up">
+            <p className="section-label">Help the Children</p>
+            <span className="orange-underline mx-auto" />
+            <h2
+              className="text-3xl md:text-4xl font-extrabold text-[#0D215C]"
+              style={{ fontFamily: "Manrope, sans-serif" }}
+            >
+              Recent Projects
+            </h2>
+            <p
+              className="text-[#584237] mt-4 max-w-xl mx-auto"
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              Transforming lives through focused educational initiatives across local communities.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {projects.map(({ title, date, desc, goal, raised, img }, i) => {
+              const pct = Math.round((raised / goal) * 100);
+              return (
+                <div
+                  key={title}
+                  className={`bg-white rounded-2xl overflow-hidden card-shadow hover:card-shadow-hover transition-all duration-300 hover:-translate-y-1 group fade-up stagger-${i + 1}`}
+                >
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={img}
+                      alt={title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <span
+                      className="text-[#EE701E] text-xs font-semibold tracking-wider uppercase"
+                      style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                    >
+                      {date}
+                    </span>
+                    <h4
+                      className="font-bold text-lg text-[#0D215C] mt-1 mb-2"
+                      style={{ fontFamily: "Manrope, sans-serif" }}
+                    >
+                      {title}
+                    </h4>
+                    <p
+                      className="text-[#584237] text-sm mb-4 leading-relaxed"
+                      style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                    >
+                      {desc}
+                    </p>
+                    <div className="h-2 w-full bg-[#E7E8E9] rounded-full overflow-hidden mb-2">
+                      <div
+                        className="h-full bg-[#EE701E] rounded-full transition-all duration-1000"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span
+                        className="text-xs text-[#584237]"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                      >
+                        ${raised.toLocaleString()} raised of ${goal.toLocaleString()}
+                      </span>
+                      <Link href="/donate" className="btn-primary text-xs py-1.5 px-4">
+                        Donate
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── IMPACT SECTION ── */}
+      <section className="py-20 bg-[#0D215C] relative overflow-hidden">
+        <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-[#EE701E]/10 rounded-full blur-3xl" />
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="fade-up">
+              <p className="section-label text-[#EE701E]">Our Impact</p>
+              <span className="orange-underline" />
+              <h2
+                className="text-3xl md:text-4xl font-extrabold text-white mb-5"
+                style={{ fontFamily: "Manrope, sans-serif" }}
+              >
+                Helping Education for{" "}
+                <span className="text-[#EE701E]">Hope Rising</span>
+              </h2>
+              <p
+                className="text-white/70 leading-relaxed mb-6"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              >
+                Your support can change lives. Join us in giving hope and opportunity to vulnerable children through donating and volunteering. Every contribution — large or small — directly funds a child's education.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/donate" className="btn-primary">
+                  Donate Now
+                </Link>
+                <Link href="/impact" className="btn-outline-orange border-white text-white hover:bg-white hover:text-[#0D215C]">
+                  See Our Impact
+                </Link>
+              </div>
+            </div>
+            <div className="relative fade-up stagger-2">
+              <img
+                src={IMPACT_IMG}
+                alt="Community impact"
+                className="w-full rounded-2xl object-cover h-72 md:h-96"
+              />
+              <div className="absolute -bottom-4 -left-4 bg-[#EE701E] text-white rounded-xl p-4 card-shadow">
+                <div className="flex items-center gap-2">
+                  <Star className="w-5 h-5 fill-white" />
+                  <div>
+                    <p className="font-bold text-sm" style={{ fontFamily: "Manrope, sans-serif" }}>Any amount helps</p>
+                    <p className="text-xs text-white/80" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>100% goes to children</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── DONATE CTA ── */}
+      <section className="py-20 bg-[#F8F9FA]">
+        <div className="container mx-auto">
+          <div className="bg-[#0D215C] rounded-3xl overflow-hidden relative">
+            <div className="absolute inset-0">
+              <img src={DONATE_IMG} alt="Children" className="w-full h-full object-cover opacity-20" />
+            </div>
+            <div className="relative z-10 p-10 md:p-16 text-center">
+              <p className="section-label text-[#EE701E] fade-up">Make a Difference Today</p>
+              <h2
+                className="text-3xl md:text-5xl font-extrabold text-white mt-3 mb-5 fade-up stagger-2"
+                style={{ fontFamily: "Manrope, sans-serif" }}
+              >
+                Every Child Deserves<br />a Chance to Learn
+              </h2>
+              <p
+                className="text-white/70 max-w-xl mx-auto mb-8 fade-up stagger-3"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              >
+                Your donation directly funds school fees, meals, books, and mentorship for vulnerable children in Zimbabwe. Join hundreds of donors who are changing lives.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center fade-up stagger-4">
+                <Link href="/donate" className="btn-primary text-sm py-4 px-10">
+                  Donate Now
+                </Link>
+                <Link href="/get-involved" className="btn-outline-orange border-white text-white hover:bg-white hover:text-[#0D215C] text-sm py-4 px-10">
+                  Become a Volunteer
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIAL ── */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-14 fade-up">
+            <p className="section-label">Our Background</p>
+            <span className="orange-underline mx-auto" />
+            <h2
+              className="text-3xl md:text-4xl font-extrabold text-[#0D215C]"
+              style={{ fontFamily: "Manrope, sans-serif" }}
+            >
+              Words from Our Founders
+            </h2>
+          </div>
+          <div className="max-w-3xl mx-auto bg-[#F8F9FA] rounded-2xl p-8 md:p-12 border border-[#DFC0B2]/50 fade-up">
+            <div className="text-[#EE701E] text-5xl font-serif leading-none mb-4">"</div>
+            <p
+              className="text-[#0D215C] text-lg md:text-xl italic leading-relaxed mb-6"
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              Hope Rising Education co-founder Bishop Gladmore Konono emphasized that spiritual guidance and mentorship are critical in steering young people away from destructive lifestyles. Education is not just about academics — it is about building character, hope, and a future.
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-full bg-[#EE701E]/20 flex items-center justify-center">
+                <Users className="w-6 h-6 text-[#EE701E]" />
+              </div>
+              <div>
+                <p
+                  className="font-bold text-[#0D215C]"
+                  style={{ fontFamily: "Manrope, sans-serif" }}
+                >
+                  Bishop Gladmore Konono
+                </p>
+                <p
+                  className="text-[#EE701E] text-sm"
+                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                >
+                  Co-Founder, Hope Rising Education
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── GET INVOLVED TEASER ── */}
+      <section className="py-16 bg-[#EE701E]">
+        <div className="container mx-auto text-center">
+          <h2
+            className="text-2xl md:text-3xl font-extrabold text-white mb-4 fade-up"
+            style={{ fontFamily: "Manrope, sans-serif" }}
+          >
+            Ready to Change a Life?
+          </h2>
+          <p
+            className="text-white/80 mb-6 fade-up stagger-2"
+            style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+          >
+            Volunteer, sponsor a child, or advocate for education access in your community.
+          </p>
+          <Link
+            href="/get-involved"
+            className="inline-flex items-center gap-2 bg-white text-[#EE701E] font-bold px-8 py-3 rounded-lg hover:bg-[#0D215C] hover:text-white transition-all duration-200 active:scale-[0.97] fade-up stagger-3"
+            style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+          >
+            Get Involved <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+}
