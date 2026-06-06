@@ -2,6 +2,7 @@
  * Design: "Warm Authority" — hero with dark overlay, impact stats, program cards, CTA sections
  */
 import { useEffect, useRef } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
 import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -114,6 +115,10 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 }
 
 export default function Home() {
+  // The userAuth hooks provides authentication state
+  // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
+  const { user } = useAuth();
+
   const revealRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
