@@ -55,10 +55,18 @@
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%">
+    <!-- Analytics: only injected when VITE_ANALYTICS_ENDPOINT is configured -->
+    <script>
+      (function() {
+        var endpoint = "%VITE_ANALYTICS_ENDPOINT%";
+        var siteId   = "%VITE_ANALYTICS_WEBSITE_ID%";
+        if (!endpoint || endpoint.startsWith("%")) return;
+        var s = document.createElement("script");
+        s.defer = true;
+        s.src = endpoint + "/umami";
+        s.setAttribute("data-website-id", siteId);
+        document.head.appendChild(s);
+      })();
     </script>
   </body>
 </html>

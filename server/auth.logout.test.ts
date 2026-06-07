@@ -1,4 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+// ── Mock Stripe BEFORE importing routers ─────────────────────────────────────
+vi.mock("./stripe", () => ({
+  stripe: {
+    checkout: { sessions: { create: vi.fn() } },
+  },
+  DONATION_TIERS: [],
+}));
+
+// ── Mock database ─────────────────────────────────────────────────────────────
+vi.mock("./db", () => ({
+  getDb: vi.fn().mockResolvedValue(null),
+}));
+
 import { appRouter } from "./routers";
 import { COOKIE_NAME } from "../shared/const";
 import type { TrpcContext } from "./_core/context";

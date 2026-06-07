@@ -1,4 +1,13 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
+
+// ── Mock Stripe BEFORE importing routers (routers -> donations -> stripe) ─────
+vi.mock("./stripe", () => ({
+  stripe: {
+    checkout: { sessions: { create: vi.fn() } },
+  },
+  DONATION_TIERS: [],
+}));
+
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 
