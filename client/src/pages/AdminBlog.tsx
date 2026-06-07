@@ -3,7 +3,7 @@
  * Accessible only to users with role === "admin".
  * Allows creating, editing, publishing/unpublishing, and deleting blog posts.
  */
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
@@ -24,7 +24,10 @@ import {
   CheckCircle,
   Clock,
   ExternalLink,
+  FolderOpen,
+  Image as ImageIcon,
 } from "lucide-react";
+import MediaPickerModal from "@/components/MediaPickerModal";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -75,6 +78,9 @@ function PostForm({
   const utils = trpc.useUtils();
   const [form, setForm] = useState<PostFormData>(initial ?? EMPTY_FORM);
   const [autoSlug, setAutoSlug] = useState(!initial?.id);
+  const [coverPickerOpen, setCoverPickerOpen] = useState(false);
+  const [contentPickerOpen, setContentPickerOpen] = useState(false);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
 
   function set(key: keyof PostFormData, value: string) {
     setForm((prev) => {
@@ -254,14 +260,25 @@ function PostForm({
             >
               Cover Image URL (optional)
             </label>
-            <input
-              type="url"
-              value={form.coverImageUrl}
-              onChange={(e) => set("coverImageUrl", e.target.value)}
-              placeholder="https://example.com/image.jpg"
-              className={inputCls}
-              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-            />
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={form.coverImageUrl}
+                onChange={(e) => set("coverImageUrl", e.target.value)}
+                placeholder="https://example.com/image.jpg or pick from library →"
+                className={`${inputCls} flex-1`}
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              />
+              <button
+                type="button"
+                onClick={() => setCoverPickerOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-[#EE701E] border border-[#EE701E] px-3 py-2 rounded-xl hover:bg-[#EE701E]/10 transition-colors whitespace-nowrap"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                title="Pick from Media Library"
+              >
+                <FolderOpen className="w-4 h-4" /> Library
+              </button>
+            </div>
             {form.coverImageUrl && (
               <img
                 src={form.coverImageUrl}
@@ -271,6 +288,17 @@ function PostForm({
               />
             )}
           </div>
+
+          {/* Cover image media picker */}
+          <MediaPickerModal
+            open={coverPickerOpen}
+            onClose={() => setCoverPickerOpen(false)}
+            title="Pick Cover Image"
+            onSelect={(url) => {
+              set("coverImageUrl", url);
+              setCoverPickerOpen(false);
+            }}
+          />
 
           {/* Excerpt */}
           <div>
@@ -299,13 +327,25 @@ function PostForm({
 
           {/* Content */}
           <div>
-            <label
-              className="block text-xs font-semibold text-[#584237] uppercase tracking-wider mb-1.5"
-              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-            >
-              Content * (HTML supported)
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label
+                className="block text-xs font-semibold text-[#584237] uppercase tracking-wider"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              >
+                Content * (HTML supported)
+              </label>
+              <button
+                type="button"
+                onClick={() => setContentPickerOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-[#EE701E] border border-[#EE701E] px-2.5 py-1 rounded-lg hover:bg-[#EE701E]/10 transition-colors"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                title="Insert image from Media Library at cursor position"
+              >
+                <ImageIcon className="w-3.5 h-3.5" /> Insert Image
+              </button>
+            </div>
             <textarea
+              ref={contentRef}
               value={form.content}
               onChange={(e) => set("content", e.target.value)}
               rows={12}
@@ -320,6 +360,31 @@ function PostForm({
               You can use HTML tags like &lt;p&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;img&gt;, &lt;a&gt; for rich formatting.
             </p>
           </div>
+
+          {/* Content image media picker */}
+          <MediaPickerModal
+            open={contentPickerOpen}
+            onClose={() => setContentPickerOpen(false)}
+            title="Insert Image into Content"
+            onSelect={(url, alt) => {
+              const tag = `<img src="${url}" alt="${alt}" class="w-full rounded-xl my-4" />`;
+              const el = contentRef.current;
+              if (el) {
+                const start = el.selectionStart ?? form.content.length;
+                const end = el.selectionEnd ?? form.content.length;
+                const newContent = form.content.slice(0, start) + tag + form.content.slice(end);
+                set("content", newContent);
+                // Restore cursor after inserted tag
+                setTimeout(() => {
+                  el.focus();
+                  el.setSelectionRange(start + tag.length, start + tag.length);
+                }, 0);
+              } else {
+                set("content", form.content + "\n" + tag);
+              }
+              setContentPickerOpen(false);
+            }}
+          />
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">

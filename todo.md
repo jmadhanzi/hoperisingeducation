@@ -84,3 +84,12 @@
 - [x] Wire siteContent to Home, About, Programs pages so edits appear live
 - [x] Write vitest tests for media and siteContent procedures
 - [x] Checkpoint and push to GitHub
+
+## Media Picker in Blog Editor
+
+- [x] Build reusable MediaPickerModal component: grid of uploaded images, search/filter, click to select
+- [x] Add "Pick from Media Library" button next to the Cover Image URL field in AdminBlog editor
+- [x] Add "Insert Image" toolbar button in the content textarea to insert markdown image syntax at cursor
+- [x] Support drag-and-drop upload directly inside the MediaPickerModal (reuse existing upload logic)
+- [x] Write vitest tests for the media picker integration
+- [x] Checkpoint and push to GitHub
