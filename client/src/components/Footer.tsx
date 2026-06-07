@@ -3,7 +3,7 @@
  * Social: Facebook, Instagram, Twitter/X, TikTok, YouTube
  */
 import { Link } from "wouter";
-import { Heart, MapPin, Mail, Phone, Facebook, Instagram, Twitter, Youtube, Globe } from "lucide-react";
+import { MapPin, Mail, Phone, Facebook, Instagram, Twitter, Youtube, Globe } from "lucide-react";
 
 // TikTok SVG icon (not in lucide-react)
 function TikTokIcon({ className }: { className?: string }) {
@@ -60,24 +60,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4 group w-fit">
-              <div className="w-9 h-9 bg-[#EE701E] rounded-lg flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white fill-white" />
-              </div>
-              <div>
-                <span
-                  className="font-extrabold text-lg leading-none text-white"
-                  style={{ fontFamily: "Manrope, sans-serif" }}
-                >
-                  Hope Rising
-                </span>
-                <span
-                  className="block text-[10px] text-[#EE701E] tracking-widest uppercase leading-none"
-                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                >
-                  Education
-                </span>
-              </div>
+            <Link href="/" className="flex items-center mb-4 group w-fit">
+              <img
+                src="/manus-storage/hope-rising-logo_ff2ddb1c.png"
+                alt="Hope Rising Education"
+                className="h-14 w-auto object-contain group-hover:opacity-90 transition-opacity duration-200"
+              />
             </Link>
             <p
               className="text-white/70 text-sm leading-relaxed mb-5"

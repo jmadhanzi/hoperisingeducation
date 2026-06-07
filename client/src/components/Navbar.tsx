@@ -5,7 +5,7 @@
  */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Heart, LayoutList } from "lucide-react";
+import { Menu, X, LayoutList } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 const navLinks = [
@@ -48,23 +48,13 @@ export default function Navbar() {
       >
         <div className="container mx-auto flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 bg-[#EE701E] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Heart className="w-5 h-5 text-white fill-white" />
-            </div>
-            <div>
-              <span
-                className="font-extrabold text-lg leading-none text-white"
-                style={{ fontFamily: "Manrope, sans-serif" }}
-              >
-                Hope Rising
-              </span>
-              <span
-                className="block text-[10px] text-[#EE701E] tracking-widest uppercase leading-none"
-                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-              >
-                Education
-              </span>
+          <Link href="/" className="flex items-center group">
+            <div className="bg-white/95 rounded-xl px-2 py-1 group-hover:scale-105 transition-transform duration-200 shadow-md">
+              <img
+                src="/manus-storage/hope-rising-logo_ff2ddb1c.png"
+                alt="Hope Rising Education"
+                className="h-9 md:h-11 w-auto max-w-[200px] object-contain"
+              />
             </div>
           </Link>
 
