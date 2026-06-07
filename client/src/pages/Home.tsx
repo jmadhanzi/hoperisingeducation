@@ -62,7 +62,7 @@ const programs = [
 const projects = [
   {
     title: "Books for All",
-    date: "January 2026",
+    date: "Active — 2026",
     desc: "Delivering books and safe learning spaces to children across Chiredzi and Chipinge.",
     goal: 5000,
     raised: 3750,
@@ -70,7 +70,7 @@ const projects = [
   },
   {
     title: "Tools for Success",
-    date: "April 2025",
+    date: "Active — 2026",
     desc: "Providing every pencil, notebook, and eraser needed for a brighter future.",
     goal: 2500,
     raised: 1250,
@@ -78,7 +78,7 @@ const projects = [
   },
   {
     title: "Build a School",
-    date: "October 2025",
+    date: "Active — 2026",
     desc: "A bold effort to build a safe, welcoming school that will give local children reliable access to education.",
     goal: 100000,
     raised: 65000,
@@ -155,7 +155,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
         <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
           <p className="section-label text-[#EE701E] mb-4 fade-up stagger-1">
-            Thousands of children are waiting for help
+            500+ children in Zimbabwe are in school because of donors like you
           </p>
           <h1
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 fade-up stagger-2"
@@ -198,7 +198,7 @@ export default function Home() {
               return (
                 <div key={label} className={`text-center fade-up stagger-${i + 1}`}>
                   <div className="w-12 h-12 bg-[#EE701E]/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Icon className="w-6 h-6 text-[#EE701E]" />
+                    <Icon className="w-6 h-6 text-[#EE701E]" aria-hidden="true" />
                   </div>
                   <div
                     className="text-3xl md:text-4xl font-extrabold text-white mb-1"
@@ -216,6 +216,9 @@ export default function Home() {
               );
             })}
           </div>
+          <p className="text-center text-white/30 text-xs mt-8" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+            Based on 12-month program data, 2023–2024. Updated annually.
+          </p>
         </div>
       </section>
 
@@ -456,23 +459,17 @@ export default function Home() {
               className="text-[#0D215C] text-lg md:text-xl italic leading-relaxed mb-6"
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
             >
-              Hope Rising Education co-founder Bishop Gladmore Konono emphasized that spiritual guidance and mentorship are critical in steering young people away from destructive lifestyles. Education is not just about academics — it is about building character, hope, and a future.
+              Education is not just about academics — it is about building character, hope, and a future. We believe that with the right support, every child in Zimbabwe can rise above their circumstances and become the best version of themselves.
             </p>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#EE701E]/20 flex items-center justify-center">
-                <Users className="w-6 h-6 text-[#EE701E]" />
+              <div className="w-12 h-12 rounded-full bg-[#EE701E] flex items-center justify-center font-extrabold text-white text-lg" style={{ fontFamily: "Manrope, sans-serif" }}>
+                GK
               </div>
               <div>
-                <p
-                  className="font-bold text-[#0D215C]"
-                  style={{ fontFamily: "Manrope, sans-serif" }}
-                >
+                <p className="font-bold text-[#0D215C]" style={{ fontFamily: "Manrope, sans-serif" }}>
                   Bishop Gladmore Konono
                 </p>
-                <p
-                  className="text-[#EE701E] text-sm"
-                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                >
+                <p className="text-[#EE701E] text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
                   Co-Founder, Hope Rising Education
                 </p>
               </div>

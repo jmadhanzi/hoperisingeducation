@@ -21,13 +21,21 @@ export const donationsRouter = router({
         donorEmail: z.string().email().optional(),
         message: z.string().max(1000).optional(),
         origin: z.string().url(),
+        impactDescription: z.string().max(255).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { amountCents, isRecurring, donorName, donorEmail, message, origin } = input;
+      const { amountCents, isRecurring, donorName, donorEmail, message, origin, impactDescription } = input;
 
       const customerEmail = donorEmail ?? ctx.user?.email ?? undefined;
       const customerName = donorName ?? ctx.user?.name ?? undefined;
+
+      // Use specific impact description on the Stripe receipt/checkout page
+      const productDescription = impactDescription
+        ? `Your donation ${impactDescription}`
+        : isRecurring
+          ? "Monthly recurring donation to support children's education in Zimbabwe"
+          : "One-time donation to support children's education in Zimbabwe";
 
       const lineItem: Stripe.Checkout.SessionCreateParams.LineItem[] = [
         {
@@ -35,17 +43,13 @@ export const donationsRouter = router({
             currency: "usd",
             unit_amount: amountCents,
             product_data: {
-              name: "Hope Rising Education Donation",
-              description: isRecurring
-                ? "Monthly recurring donation to support children's education in Zimbabwe"
-                : "One-time donation to support children's education in Zimbabwe",
+              name: "Hope Rising Education",
+              description: productDescription,
               images: [
                 "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
               ],
             },
-            ...(isRecurring
-              ? { recurring: { interval: "month" } }
-              : {}),
+            ...(isRecurring ? { recurring: { interval: "month" } } : {}),
           },
           quantity: 1,
         },

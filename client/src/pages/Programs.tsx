@@ -1,7 +1,7 @@
 /* Hope Rising Education — Programs Page */
 import { useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { BookOpen, GraduationCap, Users, Utensils, Heart, Shield, Sparkles, CheckCircle } from "lucide-react";
+import { BookOpen, GraduationCap, Users, Utensils, Heart, Shield, Sparkles, CheckCircle, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
@@ -188,8 +188,8 @@ export default function Programs() {
                     </div>
                   ))}
                 </div>
-                <Link href="/donate" className="btn-primary inline-block">
-                  Support This Program
+                <Link href={`/donate?program=${encodeURIComponent(title)}`} className="btn-primary inline-flex items-center gap-2">
+                  Fund This Program <ArrowRight className="w-4 h-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>

@@ -1,16 +1,18 @@
 /* Hope Rising Education — Contact Page */
 import { useEffect, useRef, useState } from "react";
-import { MapPin, Mail, Phone, Clock, Send } from "lucide-react";
+import { MapPin, Mail, Phone, Clock, Send, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { PageSEO } from "@/lib/seo";
+import { trpc } from "@/lib/trpc";
 
 const CONTACT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp";
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
   const revealRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,10 +26,20 @@ export default function Contact() {
     return () => observer.disconnect();
   }, []);
 
+  const submitContact = trpc.contact.submitContact.useMutation({
+    onSuccess: () => {
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+      toast.success("Message sent! We'll reply within 24–48 hours.");
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try emailing us directly.");
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message sent! We'll get back to you within 24–48 hours.");
-    setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    submitContact.mutate(formData);
   };
 
   return (
@@ -91,6 +103,13 @@ export default function Contact() {
                   label: "Phone",
                   value: "+263 776 129 568\n+1 (940) 301-2943",
                   color: "#EE701E",
+                },
+                {
+                  icon: MessageCircle,
+                  label: "WhatsApp",
+                  value: "+263 776 129 568",
+                  color: "#22c55e",
+                  href: "https://wa.me/263776129568?text=Hi%2C%20I%27d%20like%20to%20get%20in%20touch",
                 },
                 {
                   icon: Clock,
@@ -192,9 +211,17 @@ export default function Contact() {
                     style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
                   />
                 </div>
-                <button type="submit" className="btn-primary w-full py-4 flex items-center justify-center gap-2">
-                  <Send className="w-4 h-4" aria-hidden="true" /> Send Message
+                <button type="submit" disabled={submitContact.isPending} className="btn-primary w-full py-4 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+                  <Send className="w-4 h-4" aria-hidden="true" />
+                  {submitContact.isPending ? "Sending…" : "Send Message"}
                 </button>
+
+                {submitted && (
+                  <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl text-sm text-green-800" role="alert" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                    ✅ <strong>Message received!</strong> We'll reply to your email within 24–48 hours. In urgent cases, WhatsApp us at{" "}
+                    <a href="https://wa.me/263776129568" className="underline font-semibold" target="_blank" rel="noopener noreferrer">+263 776 129 568</a>.
+                  </div>
+                )}
               </form>
             </div>
           </div>

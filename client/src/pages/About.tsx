@@ -56,7 +56,7 @@ export default function About() {
             Home &rsaquo; About Us
           </p>
           <h1 className="text-4xl md:text-5xl font-extrabold" style={{ fontFamily: "Manrope, sans-serif" }}>
-            Save <span className="text-[#EE701E]">Children's</span> Life
+            Our <span className="text-[#EE701E]">Story</span>
           </h1>
         </div>
       </section>
@@ -69,7 +69,7 @@ export default function About() {
               <p className="section-label">Who We Are</p>
               <span className="orange-underline" />
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#0D215C] mb-5" style={{ fontFamily: "Manrope, sans-serif" }}>
-                Help Children: Build a School for Education
+                Founded in Zimbabwe, Fuelled by Hope
               </h2>
               <p className="text-[#584237] leading-relaxed mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
                 Hope Rising Education is a community-focused nonprofit dedicated to improving educational outcomes for underserved children and families. We provide tutoring, mentorship, and resource support alongside teacher training.
@@ -151,7 +151,7 @@ export default function About() {
       <section className="py-20 bg-[#0D215C] relative overflow-hidden">
         <div className="absolute -right-20 -top-20 w-80 h-80 bg-[#EE701E]/10 rounded-full blur-3xl" />
         <div className="container mx-auto text-center relative z-10">
-          <p className="section-label text-[#EE701E] fade-up">We Help Children</p>
+          <p className="section-label text-[#EE701E] fade-up">Our Impact in Numbers</p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-3 mb-4 fade-up stagger-2" style={{ fontFamily: "Manrope, sans-serif" }}>
             Want to Become a <span className="text-[#EE701E]">Volunteer?</span>
           </h2>

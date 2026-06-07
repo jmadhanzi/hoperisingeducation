@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { PageSEO } from "@/lib/seo";
+import { trpc } from "@/lib/trpc";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
 
@@ -62,7 +63,11 @@ const opportunities = [
 ];
 
 export default function GetInvolved() {
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", interest: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "", email: "", phone: "", interest: "",
+    location: "", skills: "", hoursPerWeek: "", message: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
   const revealRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -76,10 +81,20 @@ export default function GetInvolved() {
     return () => observer.disconnect();
   }, []);
 
+  const submitVolunteer = trpc.contact.submitVolunteer.useMutation({
+    onSuccess: () => {
+      setSubmitted(true);
+      setFormData({ name: "", email: "", phone: "", interest: "", location: "", skills: "", hoursPerWeek: "", message: "" });
+      toast.success(`Thank you, ${formData.name}! We'll be in touch within 48 hours.`);
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please email us directly at info@hoperisingeducationglobal.org");
+    },
+  });
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success(`Thank you, ${formData.name}! We'll be in touch within 48 hours to discuss how you can get involved.`);
-    setFormData({ name: "", email: "", phone: "", interest: "", message: "" });
+    submitVolunteer.mutate(formData);
   };
 
   return (
@@ -161,75 +176,106 @@ export default function GetInvolved() {
               </p>
             </div>
             <form onSubmit={handleSubmit} className="bg-[#F8F9FA] rounded-2xl p-8 card-shadow fade-up stagger-2">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Your full name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
-                    style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                  />
+              {submitted ? (
+                <div className="text-center py-8" role="alert">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-8 h-8 text-green-600" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-xl font-extrabold text-[#0D215C] mb-2" style={{ fontFamily: "Manrope, sans-serif" }}>Application Received!</h3>
+                  <p className="text-[#584237] mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                    We'll review your application and reply within 48 hours. In the meantime, feel free to explore our <Link href="/programs" className="text-[#EE701E] hover:underline">programs</Link>.
+                  </p>
+                  <button onClick={() => setSubmitted(false)} className="btn-navy text-sm py-2">Submit another application</button>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Email Address *</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="your@email.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
-                    style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                  />
-                </div>
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Phone (Optional)</label>
-                <input
-                  type="tel"
-                  placeholder="Your phone number"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
-                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Area of Interest *</label>
-                <select
-                  required
-                  value={formData.interest}
-                  onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
-                  className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
-                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                >
-                  <option value="">Select an option</option>
-                  <option value="volunteer">Volunteer</option>
-                  <option value="sponsor">Sponsor a Child</option>
-                  <option value="advocate">Advocate</option>
-                  <option value="monthly-donor">Monthly Donor</option>
-                  <option value="corporate">Corporate Partnership</option>
-                  <option value="in-kind">In-Kind Donation</option>
-                </select>
-              </div>
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Message</label>
-                <textarea
-                  placeholder="Tell us about yourself and how you'd like to help..."
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={4}
-                  className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors resize-none"
-                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                />
-              </div>
-              <button type="submit" className="btn-primary w-full py-4">
-                Submit Application
-              </button>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label htmlFor="inv-name" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Full Name *</label>
+                      <input id="inv-name" type="text" required autoComplete="name" placeholder="Your full name"
+                        value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }} />
+                    </div>
+                    <div>
+                      <label htmlFor="inv-email" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Email Address *</label>
+                      <input id="inv-email" type="email" required autoComplete="email" placeholder="your@email.com"
+                        value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label htmlFor="inv-phone" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Phone / WhatsApp</label>
+                      <input id="inv-phone" type="tel" autoComplete="tel" placeholder="+1 555 000 0000"
+                        value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }} />
+                    </div>
+                    <div>
+                      <label htmlFor="inv-location" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Location / Country</label>
+                      <input id="inv-location" type="text" placeholder="e.g. London, UK"
+                        value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }} />
+                    </div>
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="inv-interest" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Area of Interest *</label>
+                    <select id="inv-interest" required value={formData.interest}
+                      onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                      style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                      <option value="">Select an option</option>
+                      <option value="Volunteer">Volunteer</option>
+                      <option value="Sponsor a Child">Sponsor a Child</option>
+                      <option value="Advocate">Advocate</option>
+                      <option value="Monthly Donor">Monthly Donor</option>
+                      <option value="Corporate Partnership">Corporate Partnership</option>
+                      <option value="In-Kind Donation">In-Kind Donation</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label htmlFor="inv-skills" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Relevant Skills</label>
+                      <input id="inv-skills" type="text" placeholder="e.g. Teaching, Design, Finance"
+                        value={formData.skills} onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }} />
+                    </div>
+                    <div>
+                      <label htmlFor="inv-hours" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Hours Available / Week</label>
+                      <select id="inv-hours" value={formData.hoursPerWeek}
+                        onChange={(e) => setFormData({ ...formData, hoursPerWeek: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors"
+                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                        <option value="">Select</option>
+                        <option value="1-3 hrs">1–3 hours</option>
+                        <option value="4-8 hrs">4–8 hours</option>
+                        <option value="9-20 hrs">9–20 hours</option>
+                        <option value="Full time">Full time</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="mb-6">
+                    <label htmlFor="inv-message" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Tell us about yourself</label>
+                    <textarea id="inv-message" placeholder="Briefly describe your background and how you'd like to help…"
+                      value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      rows={4} className="w-full px-4 py-3 border-2 border-[#E7E8E9] rounded-lg focus:border-[#EE701E] focus:outline-none bg-white transition-colors resize-none"
+                      style={{ fontFamily: "Hanken Grotesk, sans-serif" }} />
+                  </div>
+                  <button type="submit" disabled={submitVolunteer.isPending}
+                    className="btn-primary w-full py-4 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                    {submitVolunteer.isPending ? "Submitting…" : "Submit Application"}
+                    {!submitVolunteer.isPending && <ArrowRight className="w-4 h-4" aria-hidden="true" />}
+                  </button>
+                  <p className="text-center text-xs text-[#584237] mt-3" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                    We'll reply within 48 hours. For urgent queries, WhatsApp us at{" "}
+                    <a href="https://wa.me/263776129568" className="text-green-700 font-semibold hover:underline" target="_blank" rel="noopener noreferrer">+263 776 129 568</a>.
+                  </p>
+                </>
+              )}
             </form>
           </div>
         </div>

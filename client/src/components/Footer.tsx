@@ -121,6 +121,47 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* Newsletter signup */}
+      <div className="border-t border-white/10 py-10">
+        <div className="container mx-auto">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-white font-bold mb-1" style={{ fontFamily: "Manrope, sans-serif" }}>
+              Stay connected with the children you help
+            </p>
+            <p className="text-white/60 text-sm mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+              Get monthly impact updates — no spam, unsubscribe anytime.
+            </p>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const el = e.currentTarget.querySelector("input") as HTMLInputElement;
+                if (el?.value) {
+                  window.location.href = `mailto:info@hoperisingeducationglobal.org?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(el.value)}`;
+                }
+              }}
+              className="flex gap-2 max-w-sm mx-auto"
+            >
+              <label htmlFor="footer-email" className="sr-only">Email address</label>
+              <input
+                id="footer-email"
+                type="email"
+                required
+                placeholder="your@email.com"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-[#EE701E] text-sm"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              />
+              <button
+                type="submit"
+                className="bg-[#EE701E] hover:bg-[#d4601a] text-white font-semibold px-4 py-2.5 rounded-lg text-sm transition-colors shrink-0"
+                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="container mx-auto py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
