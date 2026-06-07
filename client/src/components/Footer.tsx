@@ -125,7 +125,7 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="container mx-auto py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-white/50 text-xs" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-            © 2024 Hope Rising Education. All rights reserved.
+            © {new Date().getFullYear()} Hope Rising Education. All rights reserved.
           </p>
           <div className="flex gap-5">
             <Link href="/privacy" className="text-white/50 hover:text-white/80 text-xs transition-colors" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>

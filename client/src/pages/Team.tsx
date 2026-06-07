@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Users, Heart, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const TEAM_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
 
@@ -72,11 +73,16 @@ export default function Team() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="Our Team"
+        description="Meet the dedicated founders, leaders, and volunteers behind Hope Rising Education who are changing lives in Zimbabwe through education."
+        path="/team"
+      />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${TEAM_HERO}')` }} />
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${TEAM_HERO}')` }} role="img" aria-label="Children smiling at a Hope Rising Education school" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Home &rsaquo; Team</p>
@@ -110,7 +116,7 @@ export default function Team() {
               {teamMembers.filter(m => m.type === "Leadership").map(({ name, role, bio, img }, i) => (
                 <div key={name} className={`bg-white rounded-2xl overflow-hidden card-shadow hover:card-shadow-hover transition-all duration-300 hover:-translate-y-1 fade-up stagger-${i + 1}`}>
                   <div className="flex gap-5 p-6">
-                    <img src={img} alt={name} className="w-20 h-20 rounded-xl object-cover shrink-0 border-2 border-[#EE701E]/30" />
+                    <img src={img} alt={`${name}, ${role}`} loading="lazy" className="w-20 h-20 rounded-xl object-cover shrink-0 border-2 border-[#EE701E]/30" />
                     <div>
                       <span className="text-[#EE701E] text-xs font-bold tracking-widest uppercase" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Leadership</span>
                       <h4 className="font-bold text-lg text-[#0D215C] mt-0.5" style={{ fontFamily: "Manrope, sans-serif" }}>{name}</h4>

@@ -13,6 +13,7 @@ import { getDb } from "../db";
 import { donations, fundraisingGoals } from "../../drizzle/schema";
 import { eq, sum, count } from "drizzle-orm";
 import { notifyOwner } from "./notification";
+import rateLimit from "express-rate-limit";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -278,6 +279,54 @@ async function startServer() {
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+  // ── Security headers ───────────────────────────────────────────────────────
+  app.use((_req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "SAMEORIGIN");
+    res.setHeader("X-XSS-Protection", "1; mode=block");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    // Allow Stripe and CDN resources in CSP
+    res.setHeader(
+      "Content-Security-Policy",
+      [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' js.stripe.com",
+        "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+        "font-src 'self' fonts.gstatic.com",
+        "img-src 'self' data: https:",
+        "connect-src 'self' api.stripe.com",
+        "frame-src js.stripe.com hooks.stripe.com",
+      ].join("; ")
+    );
+    next();
+  });
+
+  // ── Rate limiting ──────────────────────────────────────────────────────────
+  // General API rate limit
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 200,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Too many requests, please try again later." },
+  });
+
+  // Strict rate limit for checkout — prevents spam/abuse of Stripe sessions
+  const checkoutLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (req) => req.ip ?? "unknown",
+    message: { error: "Too many checkout attempts. Please wait before trying again." },
+  });
+
+  app.use("/api/trpc", apiLimiter);
+  // Apply strict limit specifically to the donation checkout mutation
+  app.use("/api/trpc/donations.createCheckoutSession", checkoutLimiter);
+
   registerStorageProxy(app);
   registerOAuthRoutes(app);
 

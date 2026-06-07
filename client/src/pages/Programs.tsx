@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { BookOpen, GraduationCap, Users, Utensils, Heart, Shield, Sparkles, CheckCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const CURRICULUM_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp";
 
@@ -127,10 +128,15 @@ export default function Programs() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="Our Programs"
+        description="Hope Rising Education runs six holistic programs for children in Zimbabwe: curriculum, school fees, tutoring, nutrition, psycho-social support, and safe learning environments."
+        path="/programs"
+      />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden bg-[#0D215C]">
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden bg-[#0D215C]">
         <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('${CURRICULUM_IMG}')` }} />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Home &rsaquo; Programs</p>
@@ -153,7 +159,7 @@ export default function Programs() {
             >
               <div className={i % 2 === 1 ? "lg:order-2" : ""}>
                 <div className="relative rounded-2xl overflow-hidden">
-                  <img src={img} alt={title} className="w-full h-72 object-cover" />
+                  <img src={img} alt={`${title} — Hope Rising Education program`} loading="lazy" className="w-full h-72 object-cover" />
                   <div className="absolute top-4 left-4">
                     <span
                       className="text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full text-white"

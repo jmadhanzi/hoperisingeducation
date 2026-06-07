@@ -2,6 +2,7 @@
  * Design: Sticky top nav, transparent-to-solid on scroll
  * Mobile: Hamburger menu with slide-down drawer
  * Auth-aware: shows "My Donations" link for signed-in users
+ * Accessibility: aria-current, aria-expanded, aria-controls, keyboard-friendly
  */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
@@ -30,9 +31,20 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu on navigation
   useEffect(() => {
     setMenuOpen(false);
   }, [location]);
+
+  // Trap focus and allow Escape to close menu
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [menuOpen]);
 
   const isHome = location === "/";
 
@@ -44,12 +56,13 @@ export default function Navbar() {
             ? "bg-[#0D215C] shadow-lg"
             : "bg-transparent"
         }`}
+        role="banner"
       >
         <div className="container mx-auto flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group" aria-label="Hope Rising Education — Home">
             <div className="w-9 h-9 bg-[#EE701E] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Heart className="w-5 h-5 text-white fill-white" />
+              <Heart className="w-5 h-5 text-white fill-white" aria-hidden="true" />
             </div>
             <div>
               <span
@@ -68,12 +81,13 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 ${
+                aria-current={location === link.href ? "page" : undefined}
+                className={`px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0D215C] ${
                   location === link.href
                     ? "text-[#EE701E]"
                     : "text-white/80 hover:text-white hover:bg-white/10"
@@ -90,14 +104,15 @@ export default function Navbar() {
             {user && (
               <Link
                 href="/my-donations"
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 ${
+                aria-current={location === "/my-donations" ? "page" : undefined}
+                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E] ${
                   location === "/my-donations"
                     ? "text-[#EE701E]"
                     : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
                 style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
               >
-                <LayoutList className="w-4 h-4" />
+                <LayoutList className="w-4 h-4" aria-hidden="true" />
                 My Donations
               </Link>
             )}
@@ -108,26 +123,34 @@ export default function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            className="lg:hidden text-white p-2 rounded-md hover:bg-white/10 transition-colors"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
+            className="lg:hidden text-white p-2 rounded-md hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E]"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
           >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {menuOpen
+              ? <X className="w-6 h-6" aria-hidden="true" />
+              : <Menu className="w-6 h-6" aria-hidden="true" />
+            }
           </button>
         </div>
 
         {/* Mobile Menu */}
         <div
+          id="mobile-menu"
           className={`lg:hidden overflow-hidden transition-all duration-300 bg-[#0D215C] ${
             menuOpen ? "max-h-screen py-4 border-t border-white/10" : "max-h-0"
           }`}
+          aria-hidden={!menuOpen}
         >
-          <div className="container mx-auto flex flex-col gap-1 pb-4">
+          <nav className="container mx-auto flex flex-col gap-1 pb-4" aria-label="Mobile navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                aria-current={location === link.href ? "page" : undefined}
+                className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E] ${
                   location === link.href
                     ? "text-[#EE701E] bg-white/5"
                     : "text-white/80 hover:text-white hover:bg-white/10"
@@ -140,14 +163,15 @@ export default function Navbar() {
             {user && (
               <Link
                 href="/my-donations"
-                className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                aria-current={location === "/my-donations" ? "page" : undefined}
+                className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E] ${
                   location === "/my-donations"
                     ? "text-[#EE701E] bg-white/5"
                     : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
                 style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
               >
-                <LayoutList className="w-4 h-4" />
+                <LayoutList className="w-4 h-4" aria-hidden="true" />
                 My Donations
               </Link>
             )}
@@ -156,7 +180,7 @@ export default function Navbar() {
                 Donate Now
               </Link>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
     </>

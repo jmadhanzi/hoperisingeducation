@@ -204,3 +204,28 @@
   .stagger-5 { transition-delay: 320ms; }
   .stagger-6 { transition-delay: 400ms; }
 }
+
+/* Global focus-visible ring — keyboard users get a clear orange outline */
+:focus-visible {
+  outline: 3px solid #EE701E;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect prefers-reduced-motion — disable animations for users who request it */
+@media (prefers-reduced-motion: reduce) {
+  .fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-bounce,
+  .animate-ping,
+  .animate-spin {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

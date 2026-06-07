@@ -7,6 +7,7 @@ import { Link } from "wouter";
 import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
 const DONATE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
@@ -85,7 +86,7 @@ const projects = [
   },
 ];
 
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+function CountUp({ target, suffix = "", label = "" }: { target: number; suffix?: string; label?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -99,8 +100,10 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
             if (!start) start = timestamp;
             const progress = Math.min((timestamp - start) / duration, 1);
             const eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target) + suffix;
+            const val = Math.floor(eased * target) + suffix;
+            el.textContent = val;
             if (progress < 1) requestAnimationFrame(step);
+            else el.setAttribute("aria-label", `${target}${suffix}${label ? " " + label : ""}`);
           };
           requestAnimationFrame(step);
           observer.disconnect();
@@ -110,8 +113,8 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
+  }, [target, suffix, label]);
+  return <span ref={ref} aria-live="polite" aria-atomic="true">0{suffix}</span>;
 }
 
 export default function Home() {
@@ -138,13 +141,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO path="/" />
       <Navbar />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section id="main-content" className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Hero — Empowering Children Through Education">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url('${HERO_IMG}')` }}
+          role="img"
+          aria-label="Children in a classroom in Zimbabwe"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
         <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
@@ -176,7 +182,7 @@ export default function Home() {
           </div>
         </div>
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 animate-bounce" aria-hidden="true">
           <div className="w-0.5 h-8 bg-white/30 rounded-full" />
         </div>
       </section>
@@ -198,7 +204,7 @@ export default function Home() {
                     className="text-3xl md:text-4xl font-extrabold text-white mb-1"
                     style={{ fontFamily: "Manrope, sans-serif" }}
                   >
-                    <CountUp target={num} suffix={suffix} />
+                    <CountUp target={num} suffix={suffix} label={label} />
                   </div>
                   <p
                     className="text-white/60 text-sm"
@@ -297,7 +303,8 @@ export default function Home() {
                   <div className="h-48 overflow-hidden">
                     <img
                       src={img}
-                      alt={title}
+                      alt={`${title} — Hope Rising Education project`}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
@@ -378,7 +385,8 @@ export default function Home() {
             <div className="relative fade-up stagger-2">
               <img
                 src={IMPACT_IMG}
-                alt="Community impact"
+                alt="Hope Rising Education community members and children gathered outdoors in Zimbabwe"
+                loading="lazy"
                 className="w-full rounded-2xl object-cover h-72 md:h-96"
               />
               <div className="absolute -bottom-4 -left-4 bg-[#EE701E] text-white rounded-xl p-4 card-shadow">

@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { TrendingUp, Users, BookOpen, Heart, Award, BarChart3 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
 
@@ -47,7 +48,7 @@ const outcomes = [
   { label: "Peer Relationships", before: 31, after: 82, unit: "% healthy relationships" },
 ];
 
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+function CountUp({ target, suffix = "", label = "" }: { target: number; suffix?: string; label?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -61,8 +62,10 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
             if (!start) start = timestamp;
             const progress = Math.min((timestamp - start) / duration, 1);
             const eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target) + suffix;
+            const val = Math.floor(eased * target) + suffix;
+            el.textContent = val;
             if (progress < 1) requestAnimationFrame(step);
+            else el.setAttribute("aria-label", `${target}${suffix}${label ? " " + label : ""}`);
           };
           requestAnimationFrame(step);
           observer.disconnect();
@@ -72,8 +75,8 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
+  }, [target, suffix, label]);
+  return <span ref={ref} aria-live="polite" aria-atomic="true">0{suffix}</span>;
 }
 
 export default function Impact() {
@@ -91,10 +94,15 @@ export default function Impact() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="Our Impact"
+        description="Measurable results: 500+ children supported, 95% attendance improvement, 87% grade improvement rate. See how Hope Rising Education transforms lives in Zimbabwe."
+        path="/impact"
+      />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${IMPACT_IMG}')` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
@@ -125,7 +133,7 @@ export default function Impact() {
                   <Icon className="w-6 h-6" style={{ color }} />
                 </div>
                 <div className="text-3xl md:text-4xl font-extrabold text-[#0D215C] mb-1" style={{ fontFamily: "Manrope, sans-serif" }}>
-                  <CountUp target={value} suffix={suffix} />
+                  <CountUp target={value} suffix={suffix} label={label} />
                 </div>
                 <p className="text-[#584237] text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>{label}</p>
               </div>
@@ -192,7 +200,7 @@ export default function Impact() {
             {stories.map(({ name, location, before, after, img }, i) => (
               <div key={name} className={`bg-white rounded-2xl overflow-hidden card-shadow fade-up stagger-${i + 1}`}>
                 <div className="h-48 overflow-hidden">
-                  <img src={img} alt={name} className="w-full h-full object-cover" />
+                  <img src={img} alt={`${name} — student story from ${location}`} loading="lazy" className="w-full h-full object-cover" />
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-lg text-[#0D215C] mb-0.5" style={{ fontFamily: "Manrope, sans-serif" }}>{name}</h3>

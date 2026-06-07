@@ -11,6 +11,7 @@ import FundraisingProgress from "@/components/FundraisingProgress";
 import Footer from "@/components/Footer";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { PageSEO } from "@/lib/seo";
 
 const DONATE_IMG =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
@@ -153,6 +154,11 @@ export default function Donate() {
 
   return (
     <div className="min-h-screen">
+      <PageSEO
+        title="Donate"
+        description="Make a secure donation to Hope Rising Education. Every dollar goes directly to school fees, meals, books, and mentorship for children in Zimbabwe."
+        path="/donate"
+      />
       <Navbar />
 
       {/* ── HERO ── */}

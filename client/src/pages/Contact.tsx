@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { PageSEO } from "@/lib/seo";
 
 const CONTACT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp";
 
@@ -31,11 +32,16 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="Contact Us"
+        description="Get in touch with Hope Rising Education. We'd love to hear from you about donating, volunteering, or referring a child in need in Zimbabwe."
+        path="/contact"
+      />
       <Navbar />
       <Toaster />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${CONTACT_HERO}')` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
@@ -111,16 +117,18 @@ export default function Contact() {
 
             {/* Contact Form */}
             <div className="lg:col-span-2 fade-up stagger-2">
-              <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 card-shadow">
+              <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 card-shadow" noValidate>
                 <h3 className="text-xl font-extrabold text-[#0D215C] mb-6" style={{ fontFamily: "Manrope, sans-serif" }}>
                   Send Us a Message
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Full Name *</label>
+                    <label htmlFor="contact-name" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Full Name *</label>
                     <input
+                      id="contact-name"
                       type="text"
                       required
+                      autoComplete="name"
                       placeholder="Your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -129,10 +137,12 @@ export default function Contact() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Email Address *</label>
+                    <label htmlFor="contact-email" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Email Address *</label>
                     <input
+                      id="contact-email"
                       type="email"
                       required
+                      autoComplete="email"
                       placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -143,9 +153,11 @@ export default function Contact() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Phone (Optional)</label>
+                    <label htmlFor="contact-phone" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Phone (Optional)</label>
                     <input
+                      id="contact-phone"
                       type="tel"
+                      autoComplete="tel"
                       placeholder="Your contact number"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -154,8 +166,9 @@ export default function Contact() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Subject *</label>
+                    <label htmlFor="contact-subject" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Subject *</label>
                     <input
+                      id="contact-subject"
                       type="text"
                       required
                       placeholder="Topic of your message"
@@ -167,8 +180,9 @@ export default function Contact() {
                   </div>
                 </div>
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Message *</label>
+                  <label htmlFor="contact-message" className="block text-sm font-semibold text-[#0D215C] mb-1.5" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Message *</label>
                   <textarea
+                    id="contact-message"
                     required
                     placeholder="How can we help?"
                     value={formData.message}
@@ -179,7 +193,7 @@ export default function Contact() {
                   />
                 </div>
                 <button type="submit" className="btn-primary w-full py-4 flex items-center justify-center gap-2">
-                  <Send className="w-4 h-4" /> Send Message
+                  <Send className="w-4 h-4" aria-hidden="true" /> Send Message
                 </button>
               </form>
             </div>

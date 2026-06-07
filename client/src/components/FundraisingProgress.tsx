@@ -104,7 +104,7 @@ export default function FundraisingProgress() {
       <div className="flex items-start justify-between mb-1">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Heart className="w-4 h-4 text-[#EE701E] fill-[#EE701E]" />
+            <Heart className="w-4 h-4 text-[#EE701E] fill-[#EE701E]" aria-hidden="true" />
             <span
               className="text-xs font-semibold tracking-widest text-[#EE701E] uppercase"
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
@@ -128,7 +128,7 @@ export default function FundraisingProgress() {
           )}
         </div>
         {/* Percentage badge */}
-        <div className="flex-shrink-0 ml-4 text-right">
+        <div className="flex-shrink-0 ml-4 text-right" aria-live="polite" aria-atomic="true">
           <span
             className="text-3xl font-extrabold text-[#EE701E]"
             style={{ fontFamily: "Manrope, sans-serif" }}
@@ -149,6 +149,7 @@ export default function FundraisingProgress() {
         <span
           className="text-2xl font-extrabold text-[#0D215C]"
           style={{ fontFamily: "Manrope, sans-serif" }}
+          aria-label={`${formatUSD(animatedRaised)} raised`}
         >
           {formatUSD(animatedRaised)}
         </span>
@@ -162,7 +163,14 @@ export default function FundraisingProgress() {
       </div>
 
       {/* Progress bar track */}
-      <div className="relative h-4 bg-[#F0F1F2] rounded-full overflow-hidden mb-1">
+      <div
+        className="relative h-4 bg-[#F0F1F2] rounded-full overflow-hidden mb-1"
+        role="progressbar"
+        aria-valuenow={percentComplete}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Fundraising progress: ${percentComplete}% of goal reached`}
+      >
         {/* Animated fill */}
         <div
           className="absolute inset-y-0 left-0 rounded-full transition-all duration-1000 ease-out"
@@ -177,6 +185,7 @@ export default function FundraisingProgress() {
             key={m.pct}
             className="absolute top-0 bottom-0 w-0.5 bg-white/60"
             style={{ left: `${m.pct}%` }}
+            aria-hidden="true"
           />
         ))}
       </div>
@@ -193,7 +202,7 @@ export default function FundraisingProgress() {
       {/* Stats row */}
       <div className="flex flex-wrap gap-4 pt-3 border-t border-[#E7E8E9]">
         <div className="flex items-center gap-1.5">
-          <Users className="w-4 h-4 text-[#EE701E]" />
+          <Users className="w-4 h-4 text-[#EE701E]" aria-hidden="true" />
           <span
             className="text-sm font-semibold text-[#0D215C]"
             style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
@@ -203,7 +212,7 @@ export default function FundraisingProgress() {
         </div>
         {daysLeft !== null && (
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-[#EE701E]" />
+            <Calendar className="w-4 h-4 text-[#EE701E]" aria-hidden="true" />
             <span
               className="text-sm font-semibold text-[#0D215C]"
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
@@ -214,7 +223,7 @@ export default function FundraisingProgress() {
         )}
         {nextMilestone && (
           <div className="flex items-center gap-1.5 ml-auto">
-            <TrendingUp className="w-4 h-4 text-[#4BAF4F]" />
+            <TrendingUp className="w-4 h-4 text-[#4BAF4F]" aria-hidden="true" />
             <span
               className="text-sm text-[#584237]"
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}

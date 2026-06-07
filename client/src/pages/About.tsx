@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Target, Eye, Heart, Globe, Shield, Users, CheckCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const ABOUT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
 
@@ -39,11 +40,16 @@ export default function About() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="About Us"
+        description="Hope Rising Education was founded in Zimbabwe to break the cycle of poverty through holistic education support. Learn about our mission, vision, values, and history."
+        path="/about"
+      />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${ABOUT_HERO}')` }} />
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${ABOUT_HERO}')` }} role="img" aria-label="Children and teachers at a school in Zimbabwe" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/80" />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>

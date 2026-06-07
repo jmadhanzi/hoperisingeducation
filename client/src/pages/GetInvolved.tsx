@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { PageSEO } from "@/lib/seo";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
 
@@ -83,11 +84,16 @@ export default function GetInvolved() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="Get Involved"
+        description="Volunteer, donate monthly, sponsor a child, or become a corporate partner. There are many ways to support Hope Rising Education's mission in Zimbabwe."
+        path="/get-involved"
+      />
       <Navbar />
       <Toaster />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMG}')` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
