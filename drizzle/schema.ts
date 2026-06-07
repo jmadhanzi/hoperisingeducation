@@ -94,3 +94,54 @@ export const blogPosts = mysqlTable("blogPosts", {
 
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPost = typeof blogPosts.$inferInsert;
+
+/**
+ * Media library — photos and videos uploaded by admins.
+ * File bytes live in S3; this table stores metadata and the storage key.
+ */
+export const mediaFiles = mysqlTable("mediaFiles", {
+  id: int("id").autoincrement().primaryKey(),
+  /** S3 storage key returned by storagePut */
+  key: varchar("key", { length: 512 }).notNull().unique(),
+  /** Public URL path, e.g. /manus-storage/... */
+  url: text("url").notNull(),
+  /** Original filename from the upload */
+  filename: varchar("filename", { length: 255 }).notNull(),
+  /** MIME type, e.g. image/jpeg, video/mp4 */
+  mimeType: varchar("mimeType", { length: 100 }).notNull(),
+  /** File size in bytes */
+  size: int("size").notNull().default(0),
+  /** Optional alt text / caption */
+  altText: text("altText"),
+  /** Folder/category tag for organisation */
+  folder: varchar("folder", { length: 100 }).notNull().default("general"),
+  /** ID of the admin who uploaded the file */
+  uploadedBy: int("uploadedBy"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MediaFile = typeof mediaFiles.$inferSelect;
+export type InsertMediaFile = typeof mediaFiles.$inferInsert;
+
+/**
+ * Site content key-value store — editable text blocks for public pages.
+ * Each row is a named content slot (e.g. "hero.title", "mission.body").
+ */
+export const siteContent = mysqlTable("siteContent", {
+  id: int("id").autoincrement().primaryKey(),
+  /** Unique dot-notation key, e.g. "hero.title" */
+  key: varchar("key", { length: 255 }).notNull().unique(),
+  /** Human-readable label shown in the admin editor */
+  label: varchar("label", { length: 255 }).notNull(),
+  /** Content type: text (single line), textarea (multi-line), html (rich) */
+  type: mysqlEnum("type", ["text", "textarea", "html"]).notNull().default("text"),
+  /** The actual content value */
+  value: text("value").notNull(),
+  /** Optional section grouping for the admin UI */
+  section: varchar("section", { length: 100 }).notNull().default("general"),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SiteContent = typeof siteContent.$inferSelect;
+export type InsertSiteContent = typeof siteContent.$inferInsert;

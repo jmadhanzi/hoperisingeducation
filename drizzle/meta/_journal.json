@@ -22,6 +22,20 @@
       "when": 1780855245021,
       "tag": "0002_amazing_sphinx",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1780856708623,
+      "tag": "0003_same_loa",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1780856773365,
+      "tag": "0004_furry_magneto",
+      "breakpoints": true
     }
   ]
 }

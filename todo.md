@@ -69,3 +69,18 @@
 - [x] Seed 3 sample impact story posts via SQL
 - [x] Write vitest tests for blog procedures
 - [x] Checkpoint and push to GitHub
+
+## Admin Media Library & Site Content Editor
+
+- [x] Add mediaFiles table to drizzle/schema.ts (id, key, url, filename, mimeType, size, altText, uploadedBy, createdAt)
+- [x] Add siteContent table to drizzle/schema.ts (id, key, value, label, type, updatedAt)
+- [x] Run pnpm db:push to migrate schema
+- [x] Build media tRPC procedures: upload (admin), list (admin), delete (admin), updateAlt (admin)
+- [x] Build siteContent tRPC procedures: getAll (public), upsert (admin)
+- [x] Build AdminMedia page: drag-drop upload, grid preview, copy URL, delete, alt text edit
+- [x] Build AdminContent page: editable fields for hero, mission, stats, programs, contact info
+- [x] Add Media Library and Site Content links to AdminDashboard top bar
+- [x] Seed default siteContent rows for all editable fields
+- [x] Wire siteContent to Home, About, Programs pages so edits appear live
+- [x] Write vitest tests for media and siteContent procedures
+- [x] Checkpoint and push to GitHub

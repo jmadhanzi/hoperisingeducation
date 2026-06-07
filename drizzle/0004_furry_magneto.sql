@@ -1,0 +1,1 @@
+ALTER TABLE `siteContent` MODIFY COLUMN `value` text NOT NULL;

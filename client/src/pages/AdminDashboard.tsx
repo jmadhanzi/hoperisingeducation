@@ -12,7 +12,7 @@ import {
   DollarSign, Users, TrendingUp, Calendar, RefreshCw,
   Edit3, Save, X, ChevronDown, ChevronUp, AlertTriangle,
   CheckCircle, Clock, XCircle, RotateCcw, Heart,
-  ShieldCheck, ArrowLeft, BookOpen,
+  ShieldCheck, ArrowLeft, BookOpen, FolderOpen, FileText,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -600,6 +600,18 @@ export default function AdminDashboard() {
               className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
             >
               <BookOpen className="w-4 h-4" /> Blog
+            </Link>
+            <Link
+              href="/admin/media"
+              className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
+            >
+              <FolderOpen className="w-4 h-4" /> Media
+            </Link>
+            <Link
+              href="/admin/content"
+              className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
+            >
+              <FileText className="w-4 h-4" /> Content
             </Link>
             <button
               onClick={() => { refetchStats(); refetchDonors(); }}

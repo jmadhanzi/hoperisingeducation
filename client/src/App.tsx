@@ -21,6 +21,8 @@ import MyDonations from "./pages/MyDonations";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import AdminBlog from "./pages/AdminBlog";
+import AdminMedia from "./pages/AdminMedia";
+import AdminContent from "./pages/AdminContent";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -38,6 +40,8 @@ function Router() {
       <Route path="/blog/:slug" component={BlogPost} />
       <Route path="/blog" component={Blog} />
       <Route path="/admin/blog" component={AdminBlog} />
+      <Route path="/admin/media" component={AdminMedia} />
+      <Route path="/admin/content" component={AdminContent} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

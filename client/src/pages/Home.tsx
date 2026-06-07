@@ -7,6 +7,7 @@ import { Link } from "wouter";
 import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { trpc } from "@/lib/trpc";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
 const DONATE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
@@ -115,9 +116,11 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 }
 
 export default function Home() {
-  // The userAuth hooks provides authentication state
-  // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
   const { user } = useAuth();
+  const { data: content = {} } = trpc.siteContent.getAll.useQuery();
+
+  // Helper: get content value with fallback
+  const c = (key: string, fallback: string) => (content as Record<string, string>)[key] ?? fallback;
 
   const revealRef = useRef<HTMLDivElement>(null);
 
@@ -149,22 +152,21 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
         <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
           <p className="section-label text-[#EE701E] mb-4 fade-up stagger-1">
-            Thousands of children are waiting for help
+            {c("hero.badge", "Thousands of children are waiting for help")}
           </p>
           <h1
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 fade-up stagger-2"
             style={{ fontFamily: "Manrope, sans-serif", letterSpacing: "-0.02em" }}
           >
-            Empowering{" "}
-            <span className="text-[#EE701E]">Children</span>
+            {c("hero.title1", "Empowering Children")}
             <br />
-            Through Education
+            {c("hero.title2", "Through Education")}
           </h1>
           <p
             className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 fade-up stagger-3"
             style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
           >
-            Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.
+            {c("hero.subtitle", "Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center fade-up stagger-4">
             <Link href="/donate" className="btn-primary text-sm py-4 px-8">
