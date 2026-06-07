@@ -29,14 +29,14 @@ export default function Footer() {
               Dedicated to improving educational outcomes for underserved children and families in Zimbabwe and beyond.
             </p>
             <div className="flex gap-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Facebook">
-                <Facebook className="w-4 h-4" />
+              <a href="https://www.facebook.com/hoperisingeducation" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Hope Rising Education on Facebook">
+                <Facebook className="w-4 h-4" aria-hidden="true" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="YouTube">
-                <Youtube className="w-4 h-4" />
+              <a href="https://www.youtube.com/@hoperisingeducation" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Hope Rising Education on YouTube">
+                <Youtube className="w-4 h-4" aria-hidden="true" />
               </a>
-              <a href="https://hoperisingeducationglobal.org" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Website">
-                <Globe className="w-4 h-4" />
+              <a href="https://hoperisingeducationglobal.org" target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/10 hover:bg-[#EE701E] rounded-lg flex items-center justify-center transition-colors duration-200" aria-label="Hope Rising Education website">
+                <Globe className="w-4 h-4" aria-hidden="true" />
               </a>
             </div>
           </div>

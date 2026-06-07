@@ -21,23 +21,26 @@ const stories = [
   {
     name: "Chiedza, Age 12",
     location: "Chiredzi, Zimbabwe",
+    initial: "C",
+    color: "#EE701E",
     before: "Chiedza was missing school 3 days a week due to inability to pay fees and lack of food. Her grades were failing and she was at risk of dropping out permanently.",
     after: "After joining Hope Rising Education, Chiedza's fees were covered, she receives daily meals, and has a dedicated mentor. She now attends every day and ranked 3rd in her class.",
-    img: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&q=80",
   },
   {
     name: "Takudzwa, Age 10",
     location: "Chipinge, Zimbabwe",
+    initial: "T",
+    color: "#0D215C",
     before: "Takudzwa struggled with severe anxiety and had difficulty forming friendships. He was often disruptive in class and his teacher feared he would be expelled.",
     after: "Through the My Best Me curriculum and weekly counseling sessions, Takudzwa developed emotional regulation skills. He is now a class leader and helps other students.",
-    img: "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=400&q=80",
   },
   {
     name: "Rutendo, Age 14",
     location: "Chiredzi, Zimbabwe",
+    initial: "R",
+    color: "#4BAF4F",
     before: "Rutendo was the eldest of 6 siblings and was expected to stay home to care for younger children. She had not attended school in 2 years and had lost hope of continuing her education.",
     after: "Hope Rising Education worked with her family to provide childcare support and enrolled Rutendo in an accelerated learning program. She is now preparing for her O-Level examinations.",
-    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80",
   },
 ];
 
@@ -197,10 +200,20 @@ export default function Impact() {
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {stories.map(({ name, location, before, after, img }, i) => (
+            {stories.map(({ name, location, initial, color, before, after }, i) => (
               <div key={name} className={`bg-white rounded-2xl overflow-hidden card-shadow fade-up stagger-${i + 1}`}>
-                <div className="h-48 overflow-hidden">
-                  <img src={img} alt={`${name} — student story from ${location}`} loading="lazy" className="w-full h-full object-cover" />
+                {/* Colored banner with initial — no stock photos of children */}
+                <div
+                  className="h-32 flex items-center justify-center"
+                  style={{ backgroundColor: color }}
+                  aria-hidden="true"
+                >
+                  <span
+                    className="text-white font-extrabold"
+                    style={{ fontSize: "4rem", fontFamily: "Manrope, sans-serif", opacity: 0.4 }}
+                  >
+                    {initial}
+                  </span>
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-lg text-[#0D215C] mb-0.5" style={{ fontFamily: "Manrope, sans-serif" }}>{name}</h3>

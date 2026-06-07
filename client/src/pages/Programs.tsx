@@ -32,7 +32,7 @@ const programs = [
     title: "School Fees & Supplies",
     subtitle: "Financial Support",
     color: "#0D215C",
-    img: "https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
     desc: "Financial barriers are the primary reason children drop out of school in Zimbabwe. We cover school fees, uniforms, textbooks, stationery, and other essential supplies so no child is left behind.",
     outcomes: [
       "Zero financial barriers to school enrollment",
@@ -49,7 +49,7 @@ const programs = [
     title: "Tutoring & Mentorship",
     subtitle: "Academic Support",
     color: "#4BAF4F",
-    img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
     desc: "One-on-one and small-group tutoring sessions help children who are falling behind catch up with their peers. Dedicated mentors provide consistent guidance and encouragement throughout the school year.",
     outcomes: [
       "Improved grades across core subjects",
@@ -66,7 +66,7 @@ const programs = [
     title: "Nutrition & Meals",
     subtitle: "Health & Wellbeing",
     color: "#EE701E",
-    img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp",
     desc: "Hunger is a significant barrier to learning. We provide warm, nutritious meals daily to children in our programs, ensuring they have the energy and focus needed to engage fully in their education.",
     outcomes: [
       "Improved concentration and classroom engagement",
@@ -83,7 +83,7 @@ const programs = [
     title: "Psycho-Social Support",
     subtitle: "Mental Health",
     color: "#0D215C",
-    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp",
     desc: "Many children in our communities have experienced trauma, loss, or significant stress. Our trained counselors and safe spaces provide the emotional support children need to heal and thrive.",
     outcomes: [
       "Reduced symptoms of anxiety and depression",
@@ -100,7 +100,7 @@ const programs = [
     title: "Safe Learning Environments",
     subtitle: "Infrastructure",
     color: "#4BAF4F",
-    img: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
     desc: "We build and maintain safe, welcoming classrooms and learning spaces equipped with the tools children need to thrive. A safe environment is the foundation of effective learning.",
     outcomes: [
       "Fully equipped classrooms with furniture and materials",

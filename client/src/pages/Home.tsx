@@ -66,7 +66,7 @@ const projects = [
     desc: "Delivering books and safe learning spaces to children across Chiredzi and Chipinge.",
     goal: 5000,
     raised: 3750,
-    img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
   },
   {
     title: "Tools for Success",
@@ -74,7 +74,7 @@ const projects = [
     desc: "Providing every pencil, notebook, and eraser needed for a brighter future.",
     goal: 2500,
     raised: 1250,
-    img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
   },
   {
     title: "Build a School",
@@ -82,7 +82,7 @@ const projects = [
     desc: "A bold effort to build a safe, welcoming school that will give local children reliable access to education.",
     goal: 100000,
     raised: 65000,
-    img: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
   },
 ];
 

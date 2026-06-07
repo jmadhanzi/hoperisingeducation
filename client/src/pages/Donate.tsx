@@ -27,11 +27,11 @@ const PRESET_AMOUNTS = [25, 50, 100, 250, 500, 1000];
 
 const TRUST_SIGNALS = [
   "100% of donations go directly to children's education",
-  "Full financial transparency and annual reports",
-  "Registered nonprofit organisation",
-  "Secure, encrypted payment via Stripe",
-  "Immediate tax receipt provided",
-  "Monthly impact reports for recurring donors",
+  "Full financial transparency — reports available on request",
+  "Registered nonprofit organisation in Zimbabwe",
+  "Secure, encrypted payment processing via Stripe",
+  "Immediate tax receipt emailed after payment",
+  "Monthly impact updates for recurring donors",
 ];
 
 export default function Donate() {
@@ -109,7 +109,10 @@ export default function Donate() {
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
             >
               Your donation has been received and will directly support children's education in Zimbabwe.
-              A receipt has been sent to your email. Together, we are making hope rise.
+              A receipt has been sent to your email. Questions? Contact us at{" "}
+              <a href="mailto:info@hoperisingeducationglobal.org" className="text-[#EE701E] hover:underline font-medium">
+                info@hoperisingeducationglobal.org
+              </a>. Together, we are making hope rise.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/" className="btn-primary">Back to Home</Link>
@@ -365,15 +368,10 @@ export default function Donate() {
 
                 {/* Security note */}
                 <div className="flex items-center justify-center gap-2 mt-4 text-[#584237] text-xs">
-                  <Lock className="w-3.5 h-3.5" />
+                  <Lock className="w-3.5 h-3.5" aria-hidden="true" />
                   <span style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
                     Secured by Stripe. Your payment info is never stored on our servers.
                   </span>
-                </div>
-
-                {/* Test card hint (dev only) */}
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-700">
-                  <strong>Test mode:</strong> Use card <code>4242 4242 4242 4242</code>, any future expiry, and any CVC.
                 </div>
               </div>
             </div>
