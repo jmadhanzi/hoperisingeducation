@@ -56,3 +56,16 @@
 - [x] Register /my-donations route in App.tsx
 - [x] Write vitest tests for myDonations procedure (success path + auth guard)
 - [x] Checkpoint and push to GitHub
+
+## Blog / Impact Stories Feature
+
+- [x] Add blogPosts table to drizzle/schema.ts (id, title, slug, excerpt, content, coverImageUrl, category, author, published, publishedAt, createdAt, updatedAt)
+- [x] Run pnpm db:push to migrate schema
+- [x] Add blog tRPC procedures: list (public), getBySlug (public), create (admin), update (admin), delete (admin)
+- [x] Build public /blog listing page: card grid, category filter, search, hero
+- [x] Build public /blog/:slug post detail page: cover image, rich content, author, date, back link
+- [x] Build admin blog management UI in AdminDashboard: list posts, create/edit form, publish toggle, delete
+- [x] Add Blog link to Navbar and Footer Quick Links
+- [x] Seed 3 sample impact story posts via SQL
+- [x] Write vitest tests for blog procedures
+- [x] Checkpoint and push to GitHub

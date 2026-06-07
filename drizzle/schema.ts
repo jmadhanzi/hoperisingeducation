@@ -63,3 +63,34 @@ export const fundraisingGoals = mysqlTable("fundraisingGoals", {
 
 export type FundraisingGoal = typeof fundraisingGoals.$inferSelect;
 export type InsertFundraisingGoal = typeof fundraisingGoals.$inferInsert;
+
+/**
+ * Blog / Impact Stories posts.
+ * Content is stored as plain HTML (or markdown rendered to HTML).
+ * Slugs must be unique and URL-safe.
+ */
+export const blogPosts = mysqlTable("blogPosts", {
+  id: int("id").autoincrement().primaryKey(),
+  /** URL-safe slug, e.g. "books-for-all-2024" */
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  title: varchar("title", { length: 255 }).notNull(),
+  /** Short summary shown on listing cards */
+  excerpt: text("excerpt"),
+  /** Full post body — stored as HTML */
+  content: text("content").notNull(),
+  /** S3 or external URL for the cover image */
+  coverImageUrl: text("coverImageUrl"),
+  /** Category tag, e.g. "Impact Story", "News", "Program Update" */
+  category: varchar("category", { length: 100 }).notNull().default("Impact Story"),
+  /** Display name of the author */
+  author: varchar("author", { length: 255 }).notNull().default("Hope Rising Education"),
+  /** Whether the post is publicly visible */
+  published: boolean("published").notNull().default(false),
+  /** Set when the post is first published */
+  publishedAt: timestamp("publishedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPost = typeof blogPosts.$inferInsert;

@@ -136,6 +136,7 @@ export default function Footer() {
                 { href: "/impact", label: "Our Impact" },
                 { href: "/team", label: "Our Team" },
                 { href: "/get-involved", label: "Get Involved" },
+                { href: "/blog", label: "Blog & Stories" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

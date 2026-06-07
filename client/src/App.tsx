@@ -18,6 +18,9 @@ import Team from "./pages/Team";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard";
 import MyDonations from "./pages/MyDonations";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
+import AdminBlog from "./pages/AdminBlog";
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
@@ -32,6 +35,9 @@ function Router() {
       <Route path="/contact" component={Contact} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/my-donations" component={MyDonations} />
+      <Route path="/blog/:slug" component={BlogPost} />
+      <Route path="/blog" component={Blog} />
+      <Route path="/admin/blog" component={AdminBlog} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

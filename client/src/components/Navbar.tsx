@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/impact", label: "Impact" },
   { href: "/team", label: "Team" },
   { href: "/get-involved", label: "Get Involved" },
+  { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ];
 
