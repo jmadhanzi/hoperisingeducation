@@ -191,7 +191,6 @@ export default function Donate() {
       toast.error("Minimum donation is $1.00");
       return;
     }
-    const impactDesc = getImpact(effectiveAmountCents / 100).label;
     createCheckout.mutate({
       amountCents: effectiveAmountCents,
       isRecurring,
@@ -199,7 +198,6 @@ export default function Donate() {
       donorEmail: donorEmail || undefined,
       message: message || undefined,
       origin: window.location.origin,
-      impactDescription: impactDesc,
     });
   };
 

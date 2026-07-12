@@ -17,6 +17,7 @@ vi.mock("./stripe", () => ({
   DONATION_TIERS: [
     { id: "tier_25", label: "Supporter", amountCents: 2500, description: "Test tier" },
   ],
+  getImpactDescription: vi.fn().mockReturnValue("provides school stationery for one child"),
 }));
 
 // ── Mock database ────────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getDb } from "../db";
 import { donations, fundraisingGoals } from "../../drizzle/schema";
 import Stripe from "stripe";
-import { stripe, DONATION_TIERS } from "../stripe";
+import { stripe, DONATION_TIERS, getImpactDescription } from "../stripe";
 import { publicProcedure, protectedProcedure, router } from "../_core/trpc";
 
 export const donationsRouter = router({
@@ -21,21 +21,17 @@ export const donationsRouter = router({
         donorEmail: z.string().email().optional(),
         message: z.string().max(1000).optional(),
         origin: z.string().url(),
-        impactDescription: z.string().max(255).optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { amountCents, isRecurring, donorName, donorEmail, message, origin, impactDescription } = input;
+      const { amountCents, isRecurring, donorName, donorEmail, message, origin } = input;
 
       const customerEmail = donorEmail ?? ctx.user?.email ?? undefined;
       const customerName = donorName ?? ctx.user?.name ?? undefined;
 
-      // Use specific impact description on the Stripe receipt/checkout page
-      const productDescription = impactDescription
-        ? `Your donation ${impactDescription}`
-        : isRecurring
-          ? "Monthly recurring donation to support children's education in Zimbabwe"
-          : "One-time donation to support children's education in Zimbabwe";
+      // Impact description is derived server-side from the validated amount —
+      // never trust caller-supplied text on the Stripe checkout page.
+      const productDescription = `Your donation ${getImpactDescription(amountCents)}`;
 
       const lineItem: Stripe.Checkout.SessionCreateParams.LineItem[] = [
         {
