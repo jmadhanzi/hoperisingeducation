@@ -7,7 +7,7 @@ import { Link } from "wouter";
 import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { trpc } from "@/lib/trpc";
+import { PageSEO } from "@/lib/seo";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
 const DONATE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
@@ -62,31 +62,31 @@ const programs = [
 const projects = [
   {
     title: "Books for All",
-    date: "January 2026",
+    date: "Active — 2026",
     desc: "Delivering books and safe learning spaces to children across Chiredzi and Chipinge.",
     goal: 5000,
     raised: 3750,
-    img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
   },
   {
     title: "Tools for Success",
-    date: "April 2025",
+    date: "Active — 2026",
     desc: "Providing every pencil, notebook, and eraser needed for a brighter future.",
     goal: 2500,
     raised: 1250,
-    img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
   },
   {
     title: "Build a School",
-    date: "October 2025",
+    date: "Active — 2026",
     desc: "A bold effort to build a safe, welcoming school that will give local children reliable access to education.",
     goal: 100000,
     raised: 65000,
-    img: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80",
+    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
   },
 ];
 
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+function CountUp({ target, suffix = "", label = "" }: { target: number; suffix?: string; label?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -100,8 +100,10 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
             if (!start) start = timestamp;
             const progress = Math.min((timestamp - start) / duration, 1);
             const eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target) + suffix;
+            const val = Math.floor(eased * target) + suffix;
+            el.textContent = val;
             if (progress < 1) requestAnimationFrame(step);
+            else el.setAttribute("aria-label", `${target}${suffix}${label ? " " + label : ""}`);
           };
           requestAnimationFrame(step);
           observer.disconnect();
@@ -111,16 +113,14 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
+  }, [target, suffix, label]);
+  return <span ref={ref} aria-live="polite" aria-atomic="true">0{suffix}</span>;
 }
 
 export default function Home() {
+  // The userAuth hooks provides authentication state
+  // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
   const { user } = useAuth();
-  const { data: content = {} } = trpc.siteContent.getAll.useQuery();
-
-  // Helper: get content value with fallback
-  const c = (key: string, fallback: string) => (content as Record<string, string>)[key] ?? fallback;
 
   const revealRef = useRef<HTMLDivElement>(null);
 
@@ -141,32 +141,36 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO path="/" />
       <Navbar />
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section id="main-content" className="relative min-h-screen flex items-center justify-center overflow-hidden" aria-label="Hero — Empowering Children Through Education">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url('${HERO_IMG}')` }}
+          role="img"
+          aria-label="Children in a classroom in Zimbabwe"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
         <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
           <p className="section-label text-[#EE701E] mb-4 fade-up stagger-1">
-            {c("hero.badge", "Thousands of children are waiting for help")}
+            500+ children in Zimbabwe are in school because of donors like you
           </p>
           <h1
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 fade-up stagger-2"
             style={{ fontFamily: "Manrope, sans-serif", letterSpacing: "-0.02em" }}
           >
-            {c("hero.title1", "Empowering Children")}
+            Empowering{" "}
+            <span className="text-[#EE701E]">Children</span>
             <br />
-            {c("hero.title2", "Through Education")}
+            Through Education
           </h1>
           <p
             className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 fade-up stagger-3"
             style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
           >
-            {c("hero.subtitle", "Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.")}
+            Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center fade-up stagger-4">
             <Link href="/donate" className="btn-primary text-sm py-4 px-8">
@@ -178,7 +182,7 @@ export default function Home() {
           </div>
         </div>
         {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 animate-bounce">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 animate-bounce" aria-hidden="true">
           <div className="w-0.5 h-8 bg-white/30 rounded-full" />
         </div>
       </section>
@@ -194,13 +198,13 @@ export default function Home() {
               return (
                 <div key={label} className={`text-center fade-up stagger-${i + 1}`}>
                   <div className="w-12 h-12 bg-[#EE701E]/20 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Icon className="w-6 h-6 text-[#EE701E]" />
+                    <Icon className="w-6 h-6 text-[#EE701E]" aria-hidden="true" />
                   </div>
                   <div
                     className="text-3xl md:text-4xl font-extrabold text-white mb-1"
                     style={{ fontFamily: "Manrope, sans-serif" }}
                   >
-                    <CountUp target={num} suffix={suffix} />
+                    <CountUp target={num} suffix={suffix} label={label} />
                   </div>
                   <p
                     className="text-white/60 text-sm"
@@ -212,6 +216,9 @@ export default function Home() {
               );
             })}
           </div>
+          <p className="text-center text-white/30 text-xs mt-8" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+            Based on 12-month program data, 2023–2024. Updated annually.
+          </p>
         </div>
       </section>
 
@@ -299,7 +306,8 @@ export default function Home() {
                   <div className="h-48 overflow-hidden">
                     <img
                       src={img}
-                      alt={title}
+                      alt={`${title} — Hope Rising Education project`}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
@@ -380,7 +388,8 @@ export default function Home() {
             <div className="relative fade-up stagger-2">
               <img
                 src={IMPACT_IMG}
-                alt="Community impact"
+                alt="Hope Rising Education community members and children gathered outdoors in Zimbabwe"
+                loading="lazy"
                 className="w-full rounded-2xl object-cover h-72 md:h-96"
               />
               <div className="absolute -bottom-4 -left-4 bg-[#EE701E] text-white rounded-xl p-4 card-shadow">
@@ -450,23 +459,17 @@ export default function Home() {
               className="text-[#0D215C] text-lg md:text-xl italic leading-relaxed mb-6"
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
             >
-              Hope Rising Education co-founder Bishop Gladmore Konono emphasized that spiritual guidance and mentorship are critical in steering young people away from destructive lifestyles. Education is not just about academics — it is about building character, hope, and a future.
+              Education is not just about academics — it is about building character, hope, and a future. We believe that with the right support, every child in Zimbabwe can rise above their circumstances and become the best version of themselves.
             </p>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#EE701E]/20 flex items-center justify-center">
-                <Users className="w-6 h-6 text-[#EE701E]" />
+              <div className="w-12 h-12 rounded-full bg-[#EE701E] flex items-center justify-center font-extrabold text-white text-lg" style={{ fontFamily: "Manrope, sans-serif" }}>
+                GK
               </div>
               <div>
-                <p
-                  className="font-bold text-[#0D215C]"
-                  style={{ fontFamily: "Manrope, sans-serif" }}
-                >
+                <p className="font-bold text-[#0D215C]" style={{ fontFamily: "Manrope, sans-serif" }}>
                   Bishop Gladmore Konono
                 </p>
-                <p
-                  className="text-[#EE701E] text-sm"
-                  style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                >
+                <p className="text-[#EE701E] text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
                   Co-Founder, Hope Rising Education
                 </p>
               </div>

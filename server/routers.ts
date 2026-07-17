@@ -7,6 +7,7 @@ import { adminRouter } from "./routers/admin";
 import { blogRouter } from "./routers/blog";
 import { mediaRouter } from "./routers/media";
 import { siteContentRouter } from "./routers/siteContent";
+import { contactRouter } from "./routers/contact";
 
 export const appRouter = router({
   system: systemRouter,
@@ -25,6 +26,7 @@ export const appRouter = router({
   blog: blogRouter,
   media: mediaRouter,
   siteContent: siteContentRouter,
+  contact: contactRouter,
 });
 
 export type AppRouter = typeof appRouter;

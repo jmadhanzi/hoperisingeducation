@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { TrendingUp, Users, BookOpen, Heart, Award, BarChart3 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
 
@@ -20,23 +21,26 @@ const stories = [
   {
     name: "Chiedza, Age 12",
     location: "Chiredzi, Zimbabwe",
+    initial: "C",
+    color: "#EE701E",
     before: "Chiedza was missing school 3 days a week due to inability to pay fees and lack of food. Her grades were failing and she was at risk of dropping out permanently.",
     after: "After joining Hope Rising Education, Chiedza's fees were covered, she receives daily meals, and has a dedicated mentor. She now attends every day and ranked 3rd in her class.",
-    img: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&q=80",
   },
   {
     name: "Takudzwa, Age 10",
     location: "Chipinge, Zimbabwe",
+    initial: "T",
+    color: "#0D215C",
     before: "Takudzwa struggled with severe anxiety and had difficulty forming friendships. He was often disruptive in class and his teacher feared he would be expelled.",
     after: "Through the My Best Me curriculum and weekly counseling sessions, Takudzwa developed emotional regulation skills. He is now a class leader and helps other students.",
-    img: "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=400&q=80",
   },
   {
     name: "Rutendo, Age 14",
     location: "Chiredzi, Zimbabwe",
+    initial: "R",
+    color: "#4BAF4F",
     before: "Rutendo was the eldest of 6 siblings and was expected to stay home to care for younger children. She had not attended school in 2 years and had lost hope of continuing her education.",
     after: "Hope Rising Education worked with her family to provide childcare support and enrolled Rutendo in an accelerated learning program. She is now preparing for her O-Level examinations.",
-    img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80",
   },
 ];
 
@@ -47,7 +51,7 @@ const outcomes = [
   { label: "Peer Relationships", before: 31, after: 82, unit: "% healthy relationships" },
 ];
 
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
+function CountUp({ target, suffix = "", label = "" }: { target: number; suffix?: string; label?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -61,8 +65,10 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
             if (!start) start = timestamp;
             const progress = Math.min((timestamp - start) / duration, 1);
             const eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target) + suffix;
+            const val = Math.floor(eased * target) + suffix;
+            el.textContent = val;
             if (progress < 1) requestAnimationFrame(step);
+            else el.setAttribute("aria-label", `${target}${suffix}${label ? " " + label : ""}`);
           };
           requestAnimationFrame(step);
           observer.disconnect();
@@ -72,8 +78,8 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target, suffix]);
-  return <span ref={ref}>0{suffix}</span>;
+  }, [target, suffix, label]);
+  return <span ref={ref} aria-live="polite" aria-atomic="true">0{suffix}</span>;
 }
 
 export default function Impact() {
@@ -91,10 +97,15 @@ export default function Impact() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="Our Impact"
+        description="Measurable results: 500+ children supported, 95% attendance improvement, 87% grade improvement rate. See how Hope Rising Education transforms lives in Zimbabwe."
+        path="/impact"
+      />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${IMPACT_IMG}')` }} />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
@@ -125,7 +136,7 @@ export default function Impact() {
                   <Icon className="w-6 h-6" style={{ color }} />
                 </div>
                 <div className="text-3xl md:text-4xl font-extrabold text-[#0D215C] mb-1" style={{ fontFamily: "Manrope, sans-serif" }}>
-                  <CountUp target={value} suffix={suffix} />
+                  <CountUp target={value} suffix={suffix} label={label} />
                 </div>
                 <p className="text-[#584237] text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>{label}</p>
               </div>
@@ -189,10 +200,20 @@ export default function Impact() {
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {stories.map(({ name, location, before, after, img }, i) => (
+            {stories.map(({ name, location, initial, color, before, after }, i) => (
               <div key={name} className={`bg-white rounded-2xl overflow-hidden card-shadow fade-up stagger-${i + 1}`}>
-                <div className="h-48 overflow-hidden">
-                  <img src={img} alt={name} className="w-full h-full object-cover" />
+                {/* Colored banner with initial — no stock photos of children */}
+                <div
+                  className="h-32 flex items-center justify-center"
+                  style={{ backgroundColor: color }}
+                  aria-hidden="true"
+                >
+                  <span
+                    className="text-white font-extrabold"
+                    style={{ fontSize: "4rem", fontFamily: "Manrope, sans-serif", opacity: 0.4 }}
+                  >
+                    {initial}
+                  </span>
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-lg text-[#0D215C] mb-0.5" style={{ fontFamily: "Manrope, sans-serif" }}>{name}</h3>

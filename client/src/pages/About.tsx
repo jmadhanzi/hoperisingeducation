@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Target, Eye, Heart, Globe, Shield, Users, CheckCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { PageSEO } from "@/lib/seo";
 
 const ABOUT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
 
@@ -39,18 +40,23 @@ export default function About() {
 
   return (
     <div className="min-h-screen" ref={revealRef}>
+      <PageSEO
+        title="About Us"
+        description="Hope Rising Education was founded in Zimbabwe to break the cycle of poverty through holistic education support. Learn about our mission, vision, values, and history."
+        path="/about"
+      />
       <Navbar />
 
       {/* Hero */}
-      <section className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${ABOUT_HERO}')` }} />
+      <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${ABOUT_HERO}')` }} role="img" aria-label="Children and teachers at a school in Zimbabwe" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/80" />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
             Home &rsaquo; About Us
           </p>
           <h1 className="text-4xl md:text-5xl font-extrabold" style={{ fontFamily: "Manrope, sans-serif" }}>
-            Save <span className="text-[#EE701E]">Children's</span> Life
+            Our <span className="text-[#EE701E]">Story</span>
           </h1>
         </div>
       </section>
@@ -63,7 +69,7 @@ export default function About() {
               <p className="section-label">Who We Are</p>
               <span className="orange-underline" />
               <h2 className="text-3xl md:text-4xl font-extrabold text-[#0D215C] mb-5" style={{ fontFamily: "Manrope, sans-serif" }}>
-                Help Children: Build a School for Education
+                Founded in Zimbabwe, Fuelled by Hope
               </h2>
               <p className="text-[#584237] leading-relaxed mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
                 Hope Rising Education is a community-focused nonprofit dedicated to improving educational outcomes for underserved children and families. We provide tutoring, mentorship, and resource support alongside teacher training.
@@ -145,7 +151,7 @@ export default function About() {
       <section className="py-20 bg-[#0D215C] relative overflow-hidden">
         <div className="absolute -right-20 -top-20 w-80 h-80 bg-[#EE701E]/10 rounded-full blur-3xl" />
         <div className="container mx-auto text-center relative z-10">
-          <p className="section-label text-[#EE701E] fade-up">We Help Children</p>
+          <p className="section-label text-[#EE701E] fade-up">Our Impact in Numbers</p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-3 mb-4 fade-up stagger-2" style={{ fontFamily: "Manrope, sans-serif" }}>
             Want to Become a <span className="text-[#EE701E]">Volunteer?</span>
           </h2>
