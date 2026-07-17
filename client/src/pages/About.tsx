@@ -5,8 +5,9 @@ import { Target, Eye, Heart, Globe, Shield, Users, CheckCircle } from "lucide-re
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
-const ABOUT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
+const ABOUT_HERO = HOPE_RISING_MEDIA.classroomLineup;
 
 const values = [
   { icon: Heart, title: "Compassion", desc: "We lead with empathy, treating every child with dignity and care." },
@@ -49,7 +50,7 @@ export default function About() {
 
       {/* Hero */}
       <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${ABOUT_HERO}')` }} role="img" aria-label="Children and teachers at a school in Zimbabwe" />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${ABOUT_HERO}')` }} role="img" aria-label="Black African students in a Hope Rising Education classroom in Zimbabwe" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/80" />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>

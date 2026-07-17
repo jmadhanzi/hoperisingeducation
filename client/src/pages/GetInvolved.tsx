@@ -8,8 +8,9 @@ import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { PageSEO } from "@/lib/seo";
 import { trpc } from "@/lib/trpc";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
+const HERO_IMG = HOPE_RISING_MEDIA.classroomRefreshments;
 
 const opportunities = [
   {
@@ -109,7 +110,7 @@ export default function GetInvolved() {
 
       {/* Hero */}
       <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMG}')` }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${HERO_IMG}')` }} role="img" aria-label="Black African students learning together in a Zimbabwean classroom" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Home &rsaquo; Get Involved</p>

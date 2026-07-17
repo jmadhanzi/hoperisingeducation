@@ -3,12 +3,12 @@
  * Wrap each page with <PageSEO ... /> to get full SEO coverage.
  */
 import { Helmet } from "react-helmet-async";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
 const SITE_NAME = "Hope Rising Education";
 const DEFAULT_DESC =
   "Hope Rising Education is a nonprofit dedicated to improving educational outcomes for underserved children in Zimbabwe. We provide school fees, meals, tutoring, and psycho-social support.";
-const OG_IMAGE =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
+const OG_IMAGE = HOPE_RISING_MEDIA.communityCelebration;
 const SITE_URL = "https://hoperisingeducationglobal.org";
 
 interface PageSEOProps {

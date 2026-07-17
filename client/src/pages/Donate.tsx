@@ -23,9 +23,9 @@ import Footer from "@/components/Footer";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { PageSEO } from "@/lib/seo";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
-const DONATE_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
+const DONATE_IMG = HOPE_RISING_MEDIA.studentWithPencils;
 
 // Maps donation amount (dollars) to a human impact description
 const IMPACT_MAP: { min: number; max: number; label: string; icon: typeof BookOpen }[] = [
@@ -305,7 +305,7 @@ export default function Donate() {
 
       {/* ── HERO ── */}
       <section id="main-content" className="relative py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${DONATE_IMG}')` }} role="img" aria-label="Children learning in Zimbabwe" />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${DONATE_IMG}')` }} role="img" aria-label="A Zimbabwean student holding pencils in front of a classroom chalkboard" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/80 to-[#0D215C]/90" />
         <div className="relative z-10 container mx-auto text-center text-white pt-16">
           <p className="section-label text-[#EE701E] mb-3">Make a Difference Today</p>

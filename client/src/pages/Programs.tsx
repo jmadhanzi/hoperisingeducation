@@ -5,8 +5,10 @@ import { BookOpen, GraduationCap, Users, Utensils, Heart, Shield, Sparkles, Chec
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
-const CURRICULUM_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp";
+const HERO_IMG = HOPE_RISING_MEDIA.hopeRisingSupplies;
+const CURRICULUM_IMG = HOPE_RISING_MEDIA.studentsWithBooks;
 
 const programs = [
   {
@@ -32,7 +34,7 @@ const programs = [
     title: "School Fees & Supplies",
     subtitle: "Financial Support",
     color: "#0D215C",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
+    img: HOPE_RISING_MEDIA.studentWithPencils,
     desc: "Financial barriers are the primary reason children drop out of school in Zimbabwe. We cover school fees, uniforms, textbooks, stationery, and other essential supplies so no child is left behind.",
     outcomes: [
       "Zero financial barriers to school enrollment",
@@ -49,7 +51,7 @@ const programs = [
     title: "Tutoring & Mentorship",
     subtitle: "Academic Support",
     color: "#4BAF4F",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
+    img: HOPE_RISING_MEDIA.aiClassroomMentor,
     desc: "One-on-one and small-group tutoring sessions help children who are falling behind catch up with their peers. Dedicated mentors provide consistent guidance and encouragement throughout the school year.",
     outcomes: [
       "Improved grades across core subjects",
@@ -66,7 +68,7 @@ const programs = [
     title: "Nutrition & Meals",
     subtitle: "Health & Wellbeing",
     color: "#EE701E",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp",
+    img: HOPE_RISING_MEDIA.aiNutrition,
     desc: "Hunger is a significant barrier to learning. We provide warm, nutritious meals daily to children in our programs, ensuring they have the energy and focus needed to engage fully in their education.",
     outcomes: [
       "Improved concentration and classroom engagement",
@@ -83,7 +85,7 @@ const programs = [
     title: "Psycho-Social Support",
     subtitle: "Mental Health",
     color: "#0D215C",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp",
+    img: HOPE_RISING_MEDIA.aiCounseling,
     desc: "Many children in our communities have experienced trauma, loss, or significant stress. Our trained counselors and safe spaces provide the emotional support children need to heal and thrive.",
     outcomes: [
       "Reduced symptoms of anxiety and depression",
@@ -100,7 +102,7 @@ const programs = [
     title: "Safe Learning Environments",
     subtitle: "Infrastructure",
     color: "#4BAF4F",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
+    img: HOPE_RISING_MEDIA.classroomLineup,
     desc: "We build and maintain safe, welcoming classrooms and learning spaces equipped with the tools children need to thrive. A safe environment is the foundation of effective learning.",
     outcomes: [
       "Fully equipped classrooms with furniture and materials",
@@ -137,7 +139,7 @@ export default function Programs() {
 
       {/* Hero */}
       <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden bg-[#0D215C]">
-        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('${CURRICULUM_IMG}')` }} />
+        <div className="absolute inset-0 bg-cover bg-center opacity-30" style={{ backgroundImage: `url('${HERO_IMG}')` }} />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Home &rsaquo; Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold" style={{ fontFamily: "Manrope, sans-serif" }}>

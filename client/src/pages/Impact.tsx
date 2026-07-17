@@ -5,8 +5,9 @@ import { TrendingUp, Users, BookOpen, Heart, Award, BarChart3 } from "lucide-rea
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
-const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
+const IMPACT_IMG = HOPE_RISING_MEDIA.communityCelebration;
 
 const stats = [
   { value: 500, suffix: "+", label: "Children Supported", icon: Users, color: "#EE701E" },
@@ -106,7 +107,7 @@ export default function Impact() {
 
       {/* Hero */}
       <section id="main-content" className="relative h-72 md:h-96 flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${IMPACT_IMG}')` }} />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${IMPACT_IMG}')` }} role="img" aria-label="Hope Rising Education children celebrating with gift bags in Zimbabwe" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 to-[#0D215C]/85" />
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Home &rsaquo; Impact</p>

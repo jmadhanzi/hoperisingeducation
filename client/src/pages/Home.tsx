@@ -8,10 +8,11 @@ import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, Tr
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
+import { HOPE_RISING_MEDIA } from "@/lib/media";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
-const DONATE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
-const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
+const HERO_IMG = HOPE_RISING_MEDIA.aiClassroomMentor;
+const DONATE_IMG = HOPE_RISING_MEDIA.studentWithPencils;
+const IMPACT_IMG = HOPE_RISING_MEDIA.communityCelebration;
 
 const stats = [
   { value: "500+", label: "Children Supported", icon: Users },
@@ -66,7 +67,7 @@ const projects = [
     desc: "Delivering books and safe learning spaces to children across Chiredzi and Chipinge.",
     goal: 5000,
     raised: 3750,
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
+    img: HOPE_RISING_MEDIA.studentsWithBooks,
   },
   {
     title: "Tools for Success",
@@ -74,7 +75,7 @@ const projects = [
     desc: "Providing every pencil, notebook, and eraser needed for a brighter future.",
     goal: 2500,
     raised: 1250,
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
+    img: HOPE_RISING_MEDIA.hopeRisingSupplies,
   },
   {
     title: "Build a School",
@@ -82,7 +83,7 @@ const projects = [
     desc: "A bold effort to build a safe, welcoming school that will give local children reliable access to education.",
     goal: 100000,
     raised: 65000,
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
+    img: HOPE_RISING_MEDIA.classroomBooks,
   },
 ];
 
@@ -150,7 +151,7 @@ export default function Home() {
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url('${HERO_IMG}')` }}
           role="img"
-          aria-label="Children in a classroom in Zimbabwe"
+          aria-label="Teacher supporting a Black African student in a Zimbabwean classroom"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
         <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
@@ -388,7 +389,7 @@ export default function Home() {
             <div className="relative fade-up stagger-2">
               <img
                 src={IMPACT_IMG}
-                alt="Hope Rising Education community members and children gathered outdoors in Zimbabwe"
+                alt="Hope Rising Education children celebrating with gift bags in Zimbabwe"
                 loading="lazy"
                 className="w-full rounded-2xl object-cover h-72 md:h-96"
               />
@@ -411,7 +412,7 @@ export default function Home() {
         <div className="container mx-auto">
           <div className="bg-[#0D215C] rounded-3xl overflow-hidden relative">
             <div className="absolute inset-0">
-              <img src={DONATE_IMG} alt="Children" className="w-full h-full object-cover opacity-20" />
+              <img src={DONATE_IMG} alt="A Zimbabwean student holding pencils in front of a classroom chalkboard" className="w-full h-full object-cover opacity-20" />
             </div>
             <div className="relative z-10 p-10 md:p-16 text-center">
               <p className="section-label text-[#EE701E] fade-up">Make a Difference Today</p>

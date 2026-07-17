@@ -696,7 +696,7 @@ export default function ComponentsShowcase() {
                   <Label>Avatar</Label>
                   <div className="flex gap-4">
                     <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarImage src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663208076335/XBMILjBByQBOGLOd.jpg" alt="Hope Rising Education student" />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <Avatar>
