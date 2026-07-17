@@ -13,6 +13,7 @@ import {
   Edit3, Save, X, ChevronDown, ChevronUp, AlertTriangle,
   CheckCircle, Clock, XCircle, RotateCcw, Heart,
   ShieldCheck, ArrowLeft, BookOpen, FolderOpen, FileText,
+  Megaphone, Video,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -612,6 +613,24 @@ export default function AdminDashboard() {
               className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
             >
               <FileText className="w-4 h-4" /> Content
+            </Link>
+            <Link
+              href="/admin/announcements"
+              className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
+            >
+              <Megaphone className="w-4 h-4" /> Announcements
+            </Link>
+            <Link
+              href="/admin/videos"
+              className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
+            >
+              <Video className="w-4 h-4" /> Videos
+            </Link>
+            <Link
+              href="/admin/registrants"
+              className="flex items-center gap-1.5 text-sm text-white/70 hover:text-white transition-colors"
+            >
+              <Users className="w-4 h-4" /> Registrants
             </Link>
             <button
               onClick={() => { refetchStats(); refetchDonors(); }}

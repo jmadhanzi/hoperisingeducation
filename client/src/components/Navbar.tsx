@@ -1,13 +1,15 @@
-/* Hope Rising Education — Navbar Component
- * Design: Sticky top nav, transparent-to-solid on scroll
+/**
+ * Navbar — sticky top nav with announcement banner
+ * Design: Transparent-to-solid on scroll
  * Mobile: Hamburger menu with slide-down drawer
  * Auth-aware: shows "My Donations" link for signed-in users
- * Accessibility: aria-current, aria-expanded, aria-controls, keyboard-friendly
+ * Announcements: fetches active announcements from DB and shows a dismissable banner
  */
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, LayoutList } from "lucide-react";
+import { Menu, X, LayoutList, Megaphone } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -25,6 +27,29 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
   const { user } = useAuth();
+
+  // Announcement banner state
+  const [dismissedIds, setDismissedIds] = useState<number[]>(() => {
+    try {
+      const stored = localStorage.getItem("dismissed_announcements");
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const { data: announcements = [] } = trpc.announcements.listActive.useQuery(undefined, {
+    staleTime: 5 * 60 * 1000, // Re-fetch every 5 minutes
+  });
+
+  const visibleAnnouncements = announcements.filter((a) => !dismissedIds.includes(a.id));
+  const topAnnouncement = visibleAnnouncements[0] ?? null;
+
+  function dismissAnnouncement(id: number) {
+    const next = [...dismissedIds, id];
+    setDismissedIds(next);
+    try { localStorage.setItem("dismissed_announcements", JSON.stringify(next)); } catch {}
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -51,9 +76,36 @@ export default function Navbar() {
 
   return (
     <>
+      {/* ── Announcement Banner ── */}
+      {topAnnouncement && (
+        <div
+          className="fixed top-0 left-0 right-0 z-[60] bg-[#EE701E] text-white px-4 py-2.5 flex items-center justify-between gap-3 shadow-md"
+          role="alert"
+          aria-live="polite"
+        >
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <Megaphone className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <p
+              className="text-sm font-medium truncate"
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+              dangerouslySetInnerHTML={{ __html: topAnnouncement.body }}
+            />
+          </div>
+          <button
+            onClick={() => dismissAnnouncement(topAnnouncement.id)}
+            aria-label="Dismiss announcement"
+            className="shrink-0 p-1 rounded hover:bg-white/20 transition-colors"
+          >
+            <X className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
+      )}
+
       <header
         role="banner"
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
+          topAnnouncement ? "top-10" : "top-0"
+        } ${
           scrolled || !isHome || menuOpen
             ? "bg-[#0D215C] shadow-lg"
             : "bg-transparent"
@@ -170,6 +222,9 @@ export default function Navbar() {
           </div>
         </div>
       </header>
+
+      {/* Spacer to push page content below the fixed header (+ optional banner) */}
+      <div className={topAnnouncement ? "h-[calc(4rem+2.5rem)] md:h-[calc(5rem+2.5rem)]" : "h-16 md:h-20"} aria-hidden="true" />
     </>
   );
 }

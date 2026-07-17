@@ -620,7 +620,74 @@ export default function Donate() {
         </div>
       </section>
 
+      {/* ── RAISELY EMBED SECTION ── */}
+      <RaiselyEmbed />
+
       <Footer />
     </div>
+  );
+}
+
+/**
+ * RaiselyEmbed — loads the Raisely campaign URL from siteContent and renders
+ * an iframe embed. Shown only when raisely.embed_enabled === "true".
+ */
+function RaiselyEmbed() {
+  const { data: content } = trpc.siteContent.getAll.useQuery();
+  const campaignUrl = content?.["raisely.campaign_url"];
+  const embedEnabled = content?.["raisely.embed_enabled"] === "true";
+
+  if (!embedEnabled || !campaignUrl) return null;
+
+  // Build the Raisely embed URL — append ?embed=1 for the minimal widget view
+  let embedUrl = campaignUrl;
+  try {
+    const u = new URL(campaignUrl);
+    u.searchParams.set("embed", "1");
+    embedUrl = u.toString();
+  } catch {
+    // Use as-is if URL parsing fails
+  }
+
+  return (
+    <section className="py-16 bg-white">
+      <div className="container mx-auto">
+        <div className="text-center mb-8">
+          <p className="section-label text-[#EE701E] mb-2">Give Directly</p>
+          <h2 className="text-3xl font-extrabold text-[#0D215C]" style={{ fontFamily: "Manrope, sans-serif" }}>
+            Donate via Raisely
+          </h2>
+          <p className="text-[#584237] mt-2 max-w-xl mx-auto" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+            Prefer to give through our Raisely campaign page? Use the form below or{" "}
+            <a
+              href={campaignUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#EE701E] font-semibold hover:underline"
+            >
+              open it in a new tab
+            </a>
+            .
+          </p>
+        </div>
+        <div className="max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-lg border border-[#E7E8E9]">
+          <iframe
+            src={embedUrl}
+            title="Donate via Raisely"
+            className="w-full"
+            style={{ minHeight: 600, border: "none" }}
+            loading="lazy"
+            allow="payment"
+          />
+        </div>
+        <p className="text-center text-xs text-gray-400 mt-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+          Powered by{" "}
+          <a href="https://raisely.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
+            Raisely
+          </a>
+          . All transactions are secure and encrypted.
+        </p>
+      </div>
+    </section>
   );
 }

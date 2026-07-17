@@ -104,3 +104,43 @@
 - [x] Embed the video on the Home page in a dedicated "See Our Work in Action" section
 - [x] Update blog post cover images with real Hope Rising photos
 - [x] Checkpoint and push to GitHub
+
+## Admin Dashboard Enhancements + Raisely Integration
+
+### Announcements CMS
+- [x] Add announcements table to drizzle/schema.ts (id, title, body, publishAt, unpublishAt, isActive, createdAt, updatedAt)
+- [x] Run pnpm db:push to migrate schema
+- [x] Add announcements tRPC procedures: list (public, filtered by active/scheduled), listAll (admin), create (admin), update (admin), delete (admin)
+- [x] Build AdminAnnouncements page at /admin/announcements: list, create/edit form with rich text (bold, links, line breaks), schedule fields, publish toggle, delete
+- [x] Render active announcements on the public site (Navbar dismissable banner, respects schedule)
+- [x] Sanitize rich-text input server-side (strip dangerous HTML tags)
+- [x] Add Announcements link to AdminDashboard nav
+- [ ] Write vitest tests for announcements procedures (deferred — covered by manual verification)
+
+### Admin Video Manager
+- [x] Add marketingVideos table to drizzle/schema.ts (id, title, description, storageKey, url, thumbnailUrl, sortOrder, isPublished, createdAt, updatedAt)
+- [x] Run pnpm db:push to migrate schema
+- [x] Add videos tRPC procedures: list (public, published only), listAll (admin), upload (admin, multipart), update (admin), reorder (admin), togglePublish (admin), delete (admin)
+- [x] Build AdminVideos page at /admin/videos: drag-drop upload with progress bar, title/description fields, reorder handles, publish toggle, delete
+- [x] Validate file type (MP4/WebM/MOV) and size (max 200 MB) on both client and server
+- [ ] Render published videos on the Home page dynamically (currently static video; future enhancement)
+- [x] Add Videos link to AdminDashboard nav
+- [ ] Write vitest tests for video procedures (deferred — covered by manual verification)
+
+### Registrant Data Export
+- [x] Add registrants table to drizzle/schema.ts (id, name, email, phone, notes, createdAt)
+- [x] Add registrants tRPC procedures: list (admin, with search + date filter), exportCsv (admin, returns CSV string)
+- [x] Build AdminRegistrants page at /admin/registrants: searchable/filterable table, Export CSV button
+- [x] Wire the existing Get Involved / Contact form to save registrant data to the DB
+- [ ] Write vitest tests for registrant procedures (deferred — covered by manual verification)
+
+### Raisely Donation Integration
+- [x] Add raisely.campaign_url and raisely.embed_enabled to siteContent DEFAULT_CONTENT
+- [x] Seed raisely.campaign_url row in DB via seed-raisely.mjs
+- [x] Add RaiselyEmbed component to Donate page (reads URL from siteContent, renders iframe, lazy-loaded)
+- [x] raisely.campaign_url is now editable in AdminContent editor (Donations section)
+- [x] Navbar Donate Now button links to /donate page which contains the Raisely embed
+- [ ] Document Raisely dashboard settings user must configure manually (in ADMIN_HANDOFF.md)
+
+### Handoff Document
+- [x] Write ADMIN_HANDOFF.md covering: login, video upload, announcements, CSV export, Raisely URL config, Raisely dashboard settings

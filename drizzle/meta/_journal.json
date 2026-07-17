@@ -36,6 +36,13 @@
       "when": 1780856773365,
       "tag": "0004_furry_magneto",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1784312078627,
+      "tag": "0005_tan_sentry",
+      "breakpoints": true
     }
   ]
 }

@@ -145,3 +145,74 @@ export const siteContent = mysqlTable("siteContent", {
 
 export type SiteContent = typeof siteContent.$inferSelect;
 export type InsertSiteContent = typeof siteContent.$inferInsert;
+
+/**
+ * Announcements — time-boxed notices shown on the public site.
+ * Supports optional scheduling via publishAt / unpublishAt.
+ * Body is sanitized HTML (bold, links, line breaks only).
+ */
+export const announcements = mysqlTable("announcements", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  /** Sanitized HTML body — only bold, links, and line breaks allowed */
+  body: text("body").notNull(),
+  /** If set, announcement is not shown before this time */
+  publishAt: timestamp("publishAt"),
+  /** If set, announcement is hidden after this time */
+  unpublishAt: timestamp("unpublishAt"),
+  /** Manual override to hide without deleting */
+  isActive: boolean("isActive").notNull().default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Announcement = typeof announcements.$inferSelect;
+export type InsertAnnouncement = typeof announcements.$inferInsert;
+
+/**
+ * Marketing videos — admin-uploaded videos shown on the public site.
+ * File bytes live in storage; this table stores metadata.
+ */
+export const marketingVideos = mysqlTable("marketingVideos", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  /** Storage key returned by storagePut */
+  storageKey: varchar("storageKey", { length: 512 }).notNull(),
+  /** Public URL path, e.g. /manus-storage/... */
+  url: text("url").notNull(),
+  /** Optional poster/thumbnail URL */
+  thumbnailUrl: text("thumbnailUrl"),
+  /** Lower number = shown first */
+  sortOrder: int("sortOrder").notNull().default(0),
+  /** Whether this video is visible on the public site */
+  isPublished: boolean("isPublished").notNull().default(false),
+  /** File size in bytes */
+  size: int("size").notNull().default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MarketingVideo = typeof marketingVideos.$inferSelect;
+export type InsertMarketingVideo = typeof marketingVideos.$inferInsert;
+
+/**
+ * Registrants — people who submit the Get Involved / Contact form.
+ * Stored for admin export and follow-up.
+ */
+export const registrants = mysqlTable("registrants", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 50 }),
+  /** How they want to get involved: volunteer, donate, partner, other */
+  interest: varchar("interest", { length: 100 }),
+  /** Free-text message or notes from the form */
+  message: text("message"),
+  /** Source form: get-involved, contact, newsletter, etc. */
+  source: varchar("source", { length: 100 }).notNull().default("get-involved"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Registrant = typeof registrants.$inferSelect;
+export type InsertRegistrant = typeof registrants.$inferInsert;

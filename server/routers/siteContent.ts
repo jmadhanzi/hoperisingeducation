@@ -63,6 +63,10 @@ export const DEFAULT_CONTENT: Array<{
 
   // Footer
   { key: "footer.tagline", label: "Footer Tagline", type: "textarea", value: "Empowering children through education. Together we can break the cycle of poverty and build a brighter future for Zimbabwe.", section: "Footer" },
+
+  // Donations / Raisely
+  { key: "raisely.campaign_url", label: "Raisely Campaign URL", type: "text", value: "https://donate.raisely.com/hope-rising-education", section: "Donations" },
+  { key: "raisely.embed_enabled", label: "Show Raisely Embed on Donate Page", type: "text", value: "true", section: "Donations" },
 ];
 
 export const siteContentRouter = router({
