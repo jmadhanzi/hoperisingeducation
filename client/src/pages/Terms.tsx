@@ -50,7 +50,7 @@ export default function Terms() {
               2. Donations
             </h2>
             <p>
-              All donations are processed securely via Stripe. Donations are voluntary and
+              Donations are completed through the secure Raisely-hosted donation page. Donations are voluntary and
               non-refundable except in cases of processing error. Hope Rising Education is a
               registered nonprofit; donations may be tax-deductible in your jurisdiction —
               consult a tax adviser for guidance.

@@ -25,7 +25,7 @@ function makeAdminCtx(): TrpcContext {
     user: {
       id: 1,
       openId: "admin-open-id",
-      email: "admin@hoperisingeducation.org",
+      email: "clarakonono@gmail.com",
       name: "Admin User",
       loginMethod: "manus",
       role: "admin",
@@ -47,6 +47,24 @@ function makeUserCtx(): TrpcContext {
       name: "Regular User",
       loginMethod: "manus",
       role: "user",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      lastSignedIn: new Date(),
+    },
+    req: { protocol: "https", headers: {} } as TrpcContext["req"],
+    res: { clearCookie: vi.fn() } as unknown as TrpcContext["res"],
+  };
+}
+
+function makeStaleAdminCtx(): TrpcContext {
+  return {
+    user: {
+      id: 3,
+      openId: "stale-admin-open-id",
+      email: "former.admin@example.com",
+      name: "Former Administrator",
+      loginMethod: "manus",
+      role: "admin",
       createdAt: new Date(),
       updatedAt: new Date(),
       lastSignedIn: new Date(),
@@ -118,6 +136,11 @@ describe("admin.recentDonors", () => {
 
   it("throws FORBIDDEN for regular users", async () => {
     const caller = appRouter.createCaller(makeUserCtx());
+    await expect(caller.admin.recentDonors()).rejects.toThrow();
+  });
+
+  it("throws FORBIDDEN for a stale admin role on an unapproved email", async () => {
+    const caller = appRouter.createCaller(makeStaleAdminCtx());
     await expect(caller.admin.recentDonors()).rejects.toThrow();
   });
 

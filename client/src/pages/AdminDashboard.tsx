@@ -15,6 +15,7 @@ import {
   ShieldCheck, ArrowLeft,
 } from "lucide-react";
 import { Link } from "wouter";
+import { ContentManagement } from "@/components/admin/ContentManagement";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -689,6 +690,8 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
+
+        <ContentManagement />
 
         {/* ── Two-column: Campaign editor + Donors table ── */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">

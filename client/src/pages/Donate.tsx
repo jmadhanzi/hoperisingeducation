@@ -1,13 +1,7 @@
 /* Hope Rising Education — Donate Page
  * Improvements:
- *  - window.location.href (not window.open) for Stripe redirect
- *  - Personalised success page with impact mapping + share button
- *  - Recent donors ticker for social proof
- *  - Urgency copy on active campaign
- *  - Specific Stripe product description mapped to impact tier
- *  - Monthly upsell on success page for one-time donors
- *  - Mobile-optimised amount grid (2-col on small screens)
- *  - FAQ accordion below the form
+ * Donation checkout is delegated to a configurable Raisely destination.
+ * The Hope Rising site never accepts or stores payment card data.
  */
 import { useState, useEffect } from "react";
 import { Link, useSearch } from "wouter";
@@ -48,7 +42,7 @@ const TRUST_SIGNALS = [
   "100% of donations go directly to children's education",
   "Full financial transparency — reports available on request",
   "Registered nonprofit organisation in Zimbabwe",
-  "Secure, encrypted payment processing via Stripe",
+  "Secure payment processing takes place on the Raisely donation platform",
   "Immediate tax receipt emailed after payment",
   "Monthly impact updates for recurring donors",
 ];
@@ -147,25 +141,17 @@ export default function Donate() {
   const params = new URLSearchParams(searchString);
   const successParam = params.get("success");
   const cancelledParam = params.get("cancelled");
-  const sessionId = params.get("session_id");
-
-  const { user } = useAuth();
+  const {
+    data: donationDestination,
+    isLoading: isDonationLoading,
+    isError: isDonationDestinationError,
+  } = trpc.content.donationDestination.useQuery();
 
   const [selectedAmount, setSelectedAmount] = useState<number>(50);
   const [customAmount, setCustomAmount] = useState<string>("");
   const [useCustom, setUseCustom] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
-  const [donorName, setDonorName] = useState("");
-  const [donorEmail, setDonorEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [shared, setShared] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      setDonorName(user.name ?? "");
-      setDonorEmail(user.email ?? "");
-    }
-  }, [user]);
 
   const effectiveAmountCents = useCustom
     ? Math.round(parseFloat(customAmount || "0") * 100)
@@ -174,33 +160,18 @@ export default function Donate() {
   const effectiveDollars = effectiveAmountCents / 100;
   const impact = getImpact(effectiveDollars);
 
-  const createCheckout = trpc.donations.createCheckoutSession.useMutation({
-    onSuccess: (data) => {
-      if (data.checkoutUrl) {
-        // Same-tab redirect — no popup blocking, no lost context
-        window.location.href = data.checkoutUrl;
-      }
-    },
-    onError: (err) => {
-      toast.error(`Checkout failed: ${err.message}`);
-    },
-  });
-
   const handleDonate = () => {
     if (effectiveAmountCents < 100) {
       toast.error("Minimum donation is $1.00");
       return;
     }
-    const impactDesc = getImpact(effectiveAmountCents / 100).label;
-    createCheckout.mutate({
-      amountCents: effectiveAmountCents,
-      isRecurring,
-      donorName: donorName || undefined,
-      donorEmail: donorEmail || undefined,
-      message: message || undefined,
-      origin: window.location.origin,
-      impactDescription: impactDesc,
-    });
+    const destination = donationDestination?.raiselyDonationUrl;
+    if (!destination) {
+      toast.error("Our secure donation checkout is being prepared. Please contact Hope Rising for donation options.");
+      return;
+    }
+    // Raisely hosts the payment page. No card or bank data is handled by this site.
+    window.location.assign(destination);
   };
 
   const handleShare = async () => {
@@ -226,11 +197,10 @@ export default function Donate() {
               <CheckCircle className="w-10 h-10 text-green-600" aria-hidden="true" />
             </div>
             <h1 className="text-3xl font-extrabold text-[#0D215C] mb-3" style={{ fontFamily: "Manrope, sans-serif" }}>
-              Thank You{donorName ? `, ${donorName.split(" ")[0]}` : ""}!
+              Thank You!
             </h1>
             <p className="text-[#584237] mb-2 leading-relaxed" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-              Your donation has been received and will go directly to children's education in Zimbabwe.
-              A receipt has been sent to your email.
+                If your donation was completed, it will go directly to children's education in Zimbabwe. Raisely will provide the donation confirmation and receipt.
             </p>
             <p className="text-[#584237] mb-8 text-sm" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
               Questions? <a href="mailto:info@hoperisingeducationglobal.org" className="text-[#EE701E] hover:underline font-medium">info@hoperisingeducationglobal.org</a>
@@ -423,83 +393,37 @@ export default function Donate() {
                   </div>
                 )}
 
-                {/* Donor info */}
-                <div className="border-t border-[#E7E8E9] pt-6 mb-6">
-                  <h3 className="font-bold text-[#0D215C] mb-4" style={{ fontFamily: "Manrope, sans-serif" }}>
-                    Your Information <span className="text-[#584237] font-normal text-sm">(optional)</span>
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="donate-name" className="block text-sm font-semibold text-[#0D215C] mb-1" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Name</label>
-                      <input
-                        id="donate-name"
-                        type="text"
-                        autoComplete="name"
-                        placeholder="Your name"
-                        value={donorName}
-                        onChange={(e) => setDonorName(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-[#E7E8E9] focus:border-[#EE701E]/50 outline-none transition-colors"
-                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="donate-email" className="block text-sm font-semibold text-[#0D215C] mb-1" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Email</label>
-                      <input
-                        id="donate-email"
-                        type="email"
-                        autoComplete="email"
-                        placeholder="your@email.com"
-                        value={donorEmail}
-                        onChange={(e) => setDonorEmail(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-[#E7E8E9] focus:border-[#EE701E]/50 outline-none transition-colors"
-                        style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <label htmlFor="donate-message" className="block text-sm font-semibold text-[#0D215C] mb-1" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-                      Message <span className="text-[#584237] font-normal">(optional)</span>
-                    </label>
-                    <textarea
-                      id="donate-message"
-                      rows={3}
-                      placeholder="Share why you're donating…"
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-[#E7E8E9] focus:border-[#EE701E]/50 outline-none transition-colors resize-none"
-                      style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-                    />
-                  </div>
+                <div className="mb-6 rounded-xl border border-[#E7E8E9] bg-[#F8F9FA] p-4">
+                  <h3 className="font-bold text-[#0D215C]" style={{ fontFamily: "Manrope, sans-serif" }}>You will complete your gift securely on Raisely</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#584237]" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>After you continue, Raisely will collect the details needed to process your donation and issue any applicable receipt. Hope Rising does not store payment information on this website.</p>
                 </div>
 
                 {/* Donate button */}
                 <button
                   onClick={handleDonate}
-                  disabled={createCheckout.isPending || effectiveAmountCents < 100}
+                  disabled={isDonationLoading || !donationDestination?.raiselyDonationUrl || effectiveAmountCents < 100}
                   className="w-full btn-primary py-4 text-base flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {createCheckout.isPending ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                      Redirecting to secure checkout…
-                    </>
+                  {isDonationLoading && !isDonationDestinationError ? (
+                    <><Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />Preparing secure checkout…</>
+                  ) : donationDestination?.raiselyDonationUrl ? (
+                    <><Heart className="w-5 h-5" aria-hidden="true" />Continue to secure checkout <ArrowRight className="w-4 h-4" aria-hidden="true" /></>
                   ) : (
-                    <>
-                      <Heart className="w-5 h-5" aria-hidden="true" />
-                      Donate{" "}
-                      {effectiveAmountCents >= 100
-                        ? `$${effectiveDollars.toFixed(0)}${isRecurring ? "/month" : ""}`
-                        : ""}
-                      <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                    </>
+                    <>Online checkout coming soon</>
                   )}
                 </button>
+
+                {!isDonationLoading && !donationDestination?.raiselyDonationUrl && (
+                  <p className="mt-3 text-center text-xs leading-relaxed text-[#584237]" role="status" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+                    Online donation checkout will appear here once Hope Rising’s official Raisely campaign is configured. You can still donate through WhatsApp or bank transfer below.
+                  </p>
+                )}
 
                 {/* Security note */}
                 <div className="flex items-center justify-center gap-2 mt-4 text-[#584237] text-xs">
                   <Lock className="w-3.5 h-3.5" aria-hidden="true" />
                   <span style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-                    Secured by Stripe. Your payment info is never stored on our servers.
+                    Secure checkout is hosted by Raisely. Payment information is never stored on our servers.
                   </span>
                 </div>
 

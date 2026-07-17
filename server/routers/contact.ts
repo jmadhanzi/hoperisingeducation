@@ -5,6 +5,8 @@
 import { z } from "zod";
 import { router, publicProcedure } from "../_core/trpc";
 import { notifyOwner } from "../_core/notification";
+import { getDb } from "../db";
+import { registrations } from "../../drizzle/schema";
 
 export const contactRouter = router({
   /**
@@ -23,6 +25,17 @@ export const contactRouter = router({
     )
     .mutation(async ({ input }) => {
       const { name, email, phone, subject, message } = input;
+      const db = await getDb();
+      if (db) {
+        await db.insert(registrations).values({
+          type: "contact",
+          name,
+          email,
+          phone: phone || null,
+          subject,
+          message,
+        });
+      }
 
       // Notify owner (silently ignore if notification service isn't set up)
       await notifyOwner({
@@ -57,6 +70,20 @@ export const contactRouter = router({
     )
     .mutation(async ({ input }) => {
       const { name, email, phone, interest, location, skills, hoursPerWeek, message } = input;
+      const db = await getDb();
+      if (db) {
+        await db.insert(registrations).values({
+          type: "volunteer",
+          name,
+          email,
+          phone: phone || null,
+          interest,
+          location: location || null,
+          skills: skills || null,
+          hoursPerWeek: hoursPerWeek || null,
+          message: message || null,
+        });
+      }
 
       await notifyOwner({
         title: `🙋 New Volunteer Application: ${interest}`,

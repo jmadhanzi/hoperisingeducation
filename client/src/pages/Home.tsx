@@ -1,14 +1,15 @@
 /* Hope Rising Education — Home Page
  * Design: "Warm Authority" — hero with dark overlay, impact stats, program cards, CTA sections
  */
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Link } from "wouter";
-import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, TrendingUp, Star, ChevronRight, Megaphone, Play } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 import { HOPE_RISING_MEDIA } from "@/lib/media";
+import { trpc } from "@/lib/trpc";
 
 const HERO_IMG = HOPE_RISING_MEDIA.aiClassroomMentor;
 const DONATE_IMG = HOPE_RISING_MEDIA.studentWithPencils;
@@ -122,6 +123,19 @@ export default function Home() {
   // The userAuth hooks provides authentication state
   // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
   const { user } = useAuth();
+  const { data: homeContent } = trpc.content.pageContent.useQuery({ page: "home" });
+  const { data: announcements } = trpc.content.activeAnnouncements.useQuery();
+  const { data: featuredVideo } = trpc.content.featuredVideo.useQuery();
+
+  const pageCopy = useMemo(() => {
+    const published = new Map((homeContent ?? []).map(block => [block.contentKey, block.value]));
+    return {
+      heroEyebrow: published.get("hero-eyebrow") || "500+ children in Zimbabwe are in school because of donors like you",
+      heroTitle: published.get("hero-title") || "Empowering Children Through Education",
+      heroBody: published.get("hero-body") || "Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.",
+      impactTitle: published.get("impact-title") || "Helping Education for Hope Rising",
+    };
+  }, [homeContent]);
 
   const revealRef = useRef<HTMLDivElement>(null);
 
@@ -156,22 +170,19 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0D215C]/70 via-[#0D215C]/60 to-[#0D215C]/85" />
         <div className="relative z-10 container mx-auto text-center text-white pt-20 pb-32">
           <p className="section-label text-[#EE701E] mb-4 fade-up stagger-1">
-            500+ children in Zimbabwe are in school because of donors like you
+            {pageCopy.heroEyebrow}
           </p>
           <h1
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 fade-up stagger-2"
             style={{ fontFamily: "Manrope, sans-serif", letterSpacing: "-0.02em" }}
           >
-            Empowering{" "}
-            <span className="text-[#EE701E]">Children</span>
-            <br />
-            Through Education
+            {pageCopy.heroTitle}
           </h1>
           <p
             className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 fade-up stagger-3"
             style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
           >
-            Join us in providing access to quality education for vulnerable children in Zimbabwe. Together, we can break the cycle of poverty and build a future full of hope.
+            {pageCopy.heroBody}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center fade-up stagger-4">
             <Link href="/donate" className="btn-primary text-sm py-4 px-8">
@@ -187,6 +198,29 @@ export default function Home() {
           <div className="w-0.5 h-8 bg-white/30 rounded-full" />
         </div>
       </section>
+
+      {announcements && announcements.length > 0 && (
+        <section className="border-y border-[#DFC0B2]/50 bg-[#FFF8F2] py-5" aria-label="Latest announcements">
+          <div className="container mx-auto space-y-3">
+            {announcements.map((announcement) => (
+              <article key={announcement.id} className="flex flex-col gap-3 rounded-xl bg-white px-4 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex min-w-0 items-start gap-3">
+                  <span className="mt-0.5 rounded-lg bg-[#EE701E]/10 p-2 text-[#EE701E]" aria-hidden="true"><Megaphone className="h-4 w-4" /></span>
+                  <div>
+                    <h2 className="font-bold text-[#0D215C]" style={{ fontFamily: "Manrope, sans-serif" }}>{announcement.title}</h2>
+                    <p className="mt-1 text-sm text-[#584237]" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>{announcement.body}</p>
+                  </div>
+                </div>
+                {announcement.ctaLabel && announcement.ctaUrl ? (
+                  <a href={announcement.ctaUrl} target={announcement.ctaUrl.startsWith("http") ? "_blank" : undefined} rel={announcement.ctaUrl.startsWith("http") ? "noreferrer" : undefined} className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-[#0D215C] hover:text-[#EE701E]">
+                    {announcement.ctaLabel} <ArrowRight className="h-4 w-4" />
+                  </a>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── IMPACT STATS ── */}
       <section className="bg-[#0D215C] py-16 relative overflow-hidden">
@@ -356,6 +390,28 @@ export default function Home() {
         </div>
       </section>
 
+      {featuredVideo && (
+        <section id="media" className="bg-[#F8F9FA] py-20" aria-labelledby="media-heading">
+          <div className="container mx-auto">
+            <div className="mx-auto mb-10 max-w-2xl text-center">
+              <p className="section-label">In Our Community</p>
+              <span className="orange-underline mx-auto" />
+              <h2 id="media-heading" className="text-3xl font-extrabold text-[#0D215C] md:text-4xl" style={{ fontFamily: "Manrope, sans-serif" }}>Stories of Hope Rising</h2>
+              <p className="mt-4 text-[#584237]" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Watch the latest message from the Hope Rising Education community.</p>
+            </div>
+            <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl bg-[#0D215C] shadow-xl">
+              <video controls playsInline preload="metadata" poster={featuredVideo.thumbnailUrl || undefined} className="aspect-video w-full bg-black" aria-label={featuredVideo.title}>
+                <source src={featuredVideo.videoUrl} />
+                Your browser does not support embedded video. <a className="text-white underline" href={featuredVideo.videoUrl}>Open the video</a>.
+              </video>
+              <div className="p-5 text-white sm:p-7">
+                <div className="flex items-start gap-3"><span className="rounded-lg bg-[#EE701E] p-2" aria-hidden="true"><Play className="h-5 w-5 fill-current" /></span><div><h3 className="text-xl font-extrabold" style={{ fontFamily: "Manrope, sans-serif" }}>{featuredVideo.title}</h3>{featuredVideo.description ? <p className="mt-2 text-sm leading-relaxed text-white/75" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>{featuredVideo.description}</p> : null}</div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* ── IMPACT SECTION ── */}
       <section className="py-20 bg-[#0D215C] relative overflow-hidden">
         <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-[#EE701E]/10 rounded-full blur-3xl" />
@@ -368,8 +424,7 @@ export default function Home() {
                 className="text-3xl md:text-4xl font-extrabold text-white mb-5"
                 style={{ fontFamily: "Manrope, sans-serif" }}
               >
-                Helping Education for{" "}
-                <span className="text-[#EE701E]">Hope Rising</span>
+                {pageCopy.impactTitle}
               </h2>
               <p
                 className="text-white/70 leading-relaxed mb-6"

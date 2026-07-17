@@ -1,8 +1,8 @@
 /**
  * FundraisingProgress — Live fundraising progress bar component.
  *
- * Polls the server every 30 seconds via tRPC so the totals update
- * automatically after each successful Stripe payment without a page reload.
+ * Polls the server every 30 seconds via tRPC so published campaign totals
+ * remain current without requiring a page reload.
  */
 import { useEffect, useRef, useState } from "react";
 import { Users, Calendar, TrendingUp, Heart, Star, Award } from "lucide-react";
@@ -53,9 +53,9 @@ function useAnimatedCount(target: number, duration = 1200) {
 // ── Main component ─────────────────────────────────────────────────────────
 export default function FundraisingProgress() {
   const { data, isLoading, error } = trpc.donations.fundraisingStats.useQuery(undefined, {
-    // Poll every 30 seconds so the bar updates after a successful payment
+    // Poll every 30 seconds for refreshed campaign reporting.
     refetchInterval: 30_000,
-    // Also refetch when the window regains focus (donor returns after Stripe checkout)
+    // Also refetch when the visitor returns to the window.
     refetchOnWindowFocus: true,
     staleTime: 20_000,
   });

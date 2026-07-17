@@ -1,7 +1,16 @@
-import { boolean, int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  boolean,
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 /**
- * Core user table backing auth flow.
+ * Core user table backing the managed authentication flow.
  */
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -19,8 +28,8 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
 /**
- * Donations table — stores essential Stripe identifiers and donor metadata.
- * Amounts are stored in cents to avoid floating-point issues.
+ * Donations table retained for historical Stripe records. New public donation
+ * calls are routed to Raisely and are not handled by this application.
  */
 export const donations = mysqlTable("donations", {
   id: int("id").autoincrement().primaryKey(),
@@ -42,20 +51,14 @@ export type Donation = typeof donations.$inferSelect;
 export type InsertDonation = typeof donations.$inferInsert;
 
 /**
- * Fundraising goals — configures the progress bar on the Donate page.
- * Only one goal should have isActive = true at a time.
+ * Fundraising goals retained for historical impact reporting and campaign copy.
  */
 export const fundraisingGoals = mysqlTable("fundraisingGoals", {
   id: int("id").autoincrement().primaryKey(),
-  /** Human-readable campaign title shown on the progress bar */
   title: varchar("title", { length: 255 }).notNull(),
-  /** Campaign description shown beneath the title */
   description: text("description"),
-  /** Fundraising target in cents (e.g. 1000000 = $10,000) */
   goalCents: int("goalCents").notNull(),
-  /** Optional campaign deadline */
   deadline: timestamp("deadline"),
-  /** Whether this campaign is currently shown on the Donate page */
   isActive: boolean("isActive").notNull().default(true),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -63,3 +66,107 @@ export const fundraisingGoals = mysqlTable("fundraisingGoals", {
 
 export type FundraisingGoal = typeof fundraisingGoals.$inferSelect;
 export type InsertFundraisingGoal = typeof fundraisingGoals.$inferInsert;
+
+/**
+ * Small, structured page content blocks. The UI treats all values as plain
+ * text; no raw HTML is stored or rendered on public pages.
+ */
+export const siteContent = mysqlTable(
+  "siteContent",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    page: varchar("page", { length: 80 }).notNull(),
+    contentKey: varchar("contentKey", { length: 120 }).notNull(),
+    label: varchar("label", { length: 255 }).notNull(),
+    value: text("value").notNull(),
+    isPublished: boolean("isPublished").notNull().default(true),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({
+    pageContentKeyUnique: uniqueIndex("siteContent_page_contentKey_unique").on(
+      table.page,
+      table.contentKey,
+    ),
+  }),
+);
+
+export type SiteContent = typeof siteContent.$inferSelect;
+export type InsertSiteContent = typeof siteContent.$inferInsert;
+
+/**
+ * Administrator-curated marketing videos. URLs may originate from managed
+ * object storage or a vetted external video host.
+ */
+export const marketingVideos = mysqlTable("marketingVideos", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  videoUrl: varchar("videoUrl", { length: 1024 }).notNull(),
+  thumbnailUrl: varchar("thumbnailUrl", { length: 1024 }),
+  isFeatured: boolean("isFeatured").notNull().default(false),
+  isActive: boolean("isActive").notNull().default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MarketingVideo = typeof marketingVideos.$inferSelect;
+export type InsertMarketingVideo = typeof marketingVideos.$inferInsert;
+
+/**
+ * Time-bounded public announcements. Each announcement is plain text so it
+ * can be rendered safely and consistently across the website.
+ */
+export const announcements = mysqlTable("announcements", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  body: text("body").notNull(),
+  ctaLabel: varchar("ctaLabel", { length: 80 }),
+  ctaUrl: varchar("ctaUrl", { length: 1024 }),
+  isActive: boolean("isActive").notNull().default(true),
+  startsAt: timestamp("startsAt"),
+  endsAt: timestamp("endsAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Announcement = typeof announcements.$inferSelect;
+export type InsertAnnouncement = typeof announcements.$inferInsert;
+
+/**
+ * Persisted contact and volunteer submissions. Records stay server-side and
+ * are only exposed through administrator procedures or a generated CSV export.
+ */
+export const registrations = mysqlTable("registrations", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["contact", "volunteer"]).notNull(),
+  status: mysqlEnum("status", ["new", "in_progress", "archived"]).notNull().default("new"),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }).notNull(),
+  phone: varchar("phone", { length: 30 }),
+  subject: varchar("subject", { length: 255 }),
+  interest: varchar("interest", { length: 100 }),
+  location: varchar("location", { length: 255 }),
+  skills: varchar("skills", { length: 500 }),
+  hoursPerWeek: varchar("hoursPerWeek", { length: 50 }),
+  message: text("message"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Registration = typeof registrations.$inferSelect;
+export type InsertRegistration = typeof registrations.$inferInsert;
+
+/**
+ * Server-managed public configuration. Settings are keyed so only selected,
+ * explicitly public values are returned to public website visitors.
+ */
+export const siteSettings = mysqlTable("siteSettings", {
+  id: int("id").autoincrement().primaryKey(),
+  settingKey: varchar("settingKey", { length: 120 }).notNull().unique(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SiteSetting = typeof siteSettings.$inferSelect;
+export type InsertSiteSetting = typeof siteSettings.$inferInsert;

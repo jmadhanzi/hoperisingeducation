@@ -1,19 +1,10 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { appRouter } from "./routers";
+import { getDb } from "./db";
 import type { TrpcContext } from "./_core/context";
 
-// ── Mock Stripe ──────────────────────────────────────────────────────────────
+// ── Mock donation tiers ──────────────────────────────────────────────────────
 vi.mock("./stripe", () => ({
-  stripe: {
-    checkout: {
-      sessions: {
-        create: vi.fn().mockResolvedValue({
-          id: "cs_test_session_123",
-          url: "https://checkout.stripe.com/pay/cs_test_session_123",
-        }),
-      },
-    },
-  },
   DONATION_TIERS: [
     { id: "tier_25", label: "Supporter", amountCents: 2500, description: "Test tier" },
   ],
@@ -23,6 +14,12 @@ vi.mock("./stripe", () => ({
 vi.mock("./db", () => ({
   getDb: vi.fn().mockResolvedValue(null), // null = DB unavailable (safe for unit tests)
 }));
+
+// Keep each test independent: most historic reporting tests expect no database.
+beforeEach(() => {
+  vi.clearAllMocks();
+  vi.mocked(getDb).mockResolvedValue(null);
+});
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function makePublicCtx(): TrpcContext {
@@ -62,55 +59,61 @@ describe("donations.tiers", () => {
   });
 });
 
+function donationConfigurationDb(value: string | undefined) {
+  return {
+    select: vi.fn(() => ({
+      from: vi.fn(() => ({
+        where: vi.fn(() => ({
+          limit: vi.fn().mockResolvedValue(value === undefined ? [] : [{ value }]),
+        })),
+      })),
+    })),
+  };
+}
+
 describe("donations.createCheckoutSession", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  it("returns the configured Raisely URL for an anonymous visitor", async () => {
+    vi.mocked(getDb).mockResolvedValue(
+      donationConfigurationDb("https://www.raisely.com/hope-rising") as never,
+    );
 
-  it("creates a checkout session and returns a URL for anonymous donor", async () => {
     const caller = appRouter.createCaller(makePublicCtx());
-    const result = await caller.donations.createCheckoutSession({
-      amountCents: 5000,
-      isRecurring: false,
-      origin: "https://example.com",
+    await expect(caller.donations.createCheckoutSession()).resolves.toEqual({
+      checkoutUrl: "https://www.raisely.com/hope-rising",
+      provider: "raisely",
     });
-    expect(result).toHaveProperty("checkoutUrl");
-    expect(result.checkoutUrl).toContain("checkout.stripe.com");
   });
 
-  it("creates a checkout session for an authenticated user", async () => {
+  it("does not require donor payment details or authentication to return the hosted campaign", async () => {
+    vi.mocked(getDb).mockResolvedValue(
+      donationConfigurationDb("https://donate.raisely.com/hope-rising") as never,
+    );
+
     const caller = appRouter.createCaller(makeAuthCtx());
-    const result = await caller.donations.createCheckoutSession({
-      amountCents: 10000,
-      isRecurring: true,
-      donorName: "Jane Donor",
-      donorEmail: "donor@example.com",
-      message: "Keep up the great work!",
-      origin: "https://example.com",
+    await expect(caller.donations.createCheckoutSession()).resolves.toMatchObject({
+      checkoutUrl: "https://donate.raisely.com/hope-rising",
+      provider: "raisely",
     });
-    expect(result.checkoutUrl).toBeTruthy();
   });
 
-  it("rejects amounts below $1.00 (100 cents)", async () => {
+  it("fails closed when no campaign URL has been configured", async () => {
+    vi.mocked(getDb).mockResolvedValue(donationConfigurationDb(undefined) as never);
+
     const caller = appRouter.createCaller(makePublicCtx());
-    await expect(
-      caller.donations.createCheckoutSession({
-        amountCents: 50, // below minimum
-        isRecurring: false,
-        origin: "https://example.com",
-      })
-    ).rejects.toThrow();
+    await expect(caller.donations.createCheckoutSession()).rejects.toMatchObject({
+      code: "PRECONDITION_FAILED",
+    });
   });
 
-  it("rejects invalid origin URLs", async () => {
+  it("fails closed for a non-Raisely stored URL", async () => {
+    vi.mocked(getDb).mockResolvedValue(
+      donationConfigurationDb("https://example.com/not-a-campaign") as never,
+    );
+
     const caller = appRouter.createCaller(makePublicCtx());
-    await expect(
-      caller.donations.createCheckoutSession({
-        amountCents: 5000,
-        isRecurring: false,
-        origin: "not-a-url",
-      })
-    ).rejects.toThrow();
+    await expect(caller.donations.createCheckoutSession()).rejects.toMatchObject({
+      code: "PRECONDITION_FAILED",
+    });
   });
 });
 

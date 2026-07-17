@@ -63,8 +63,7 @@ export default function Privacy() {
                 <strong>Identity data</strong> — your name and email address.
               </li>
               <li>
-                <strong>Payment data</strong> — processed entirely by Stripe. We store only the
-                Stripe session ID and transaction amount; we never see or store your card details.
+                <strong>Payment data</strong> — processed by Raisely when you continue to its hosted donation page. Hope Rising does not collect or store your payment card details on this website.
               </li>
               <li>
                 <strong>Contact data</strong> — messages you send us via the contact form.
@@ -110,10 +109,7 @@ export default function Privacy() {
             </h2>
             <ul>
               <li>
-                <strong>Stripe</strong> — payment processing. See{" "}
-                <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[#EE701E] hover:underline">
-                  Stripe&rsquo;s Privacy Policy
-                </a>.
+                <strong>Raisely</strong> — hosted donation and payment processing. Please review the privacy information provided on the active Raisely donation page before completing a gift.
               </li>
               <li>
                 <strong>Amazon CloudFront</strong> — image and asset delivery via CDN.

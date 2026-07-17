@@ -287,17 +287,17 @@ async function startServer() {
     res.setHeader("X-XSS-Protection", "1; mode=block");
     res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
     res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
-    // Allow Stripe and CDN resources in CSP
+    // Public pages use local scripts and administrator-approved HTTPS media.
     res.setHeader(
       "Content-Security-Policy",
       [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' js.stripe.com",
+        "script-src 'self' 'unsafe-inline'",
         "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
         "font-src 'self' fonts.gstatic.com",
         "img-src 'self' data: https:",
-        "connect-src 'self' api.stripe.com",
-        "frame-src js.stripe.com hooks.stripe.com",
+        "connect-src 'self'",
+        "frame-src 'none'",
       ].join("; ")
     );
     next();
@@ -313,19 +313,19 @@ async function startServer() {
     message: { error: "Too many requests, please try again later." },
   });
 
-  // Strict rate limit for checkout — prevents spam/abuse of Stripe sessions
-  const checkoutLimiter = rateLimit({
+  // Tight limit for the legacy-compatible donation redirect endpoint.
+  const donationRedirectLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 20,
     standardHeaders: true,
     legacyHeaders: false,
     keyGenerator: (req) => req.ip ?? "unknown",
-    message: { error: "Too many checkout attempts. Please wait before trying again." },
+    message: { error: "Too many donation requests. Please wait before trying again." },
   });
 
   app.use("/api/trpc", apiLimiter);
-  // Apply strict limit specifically to the donation checkout mutation
-  app.use("/api/trpc/donations.createCheckoutSession", checkoutLimiter);
+  // Preserve abuse protection for old clients that request the Raisely redirect.
+  app.use("/api/trpc/donations.createCheckoutSession", donationRedirectLimiter);
 
   registerStorageProxy(app);
   registerOAuthRoutes(app);

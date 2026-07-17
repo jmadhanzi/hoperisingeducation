@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 import { HOPE_RISING_MEDIA } from "@/lib/media";
+import { trpc } from "@/lib/trpc";
 
 const HERO_IMG = HOPE_RISING_MEDIA.hopeRisingSupplies;
 const CURRICULUM_IMG = HOPE_RISING_MEDIA.studentsWithBooks;
@@ -117,6 +118,13 @@ const programs = [
 
 export default function Programs() {
   const revealRef = useRef<HTMLDivElement>(null);
+  const { data: editableContent } = trpc.content.pageContent.useQuery({ page: "programs" });
+  const contentByKey = new Map((editableContent ?? []).map(item => [item.contentKey, item.value]));
+  const contentValue = (key: string, fallback: string) => contentByKey.get(key) ?? fallback;
+  const programItems = programs.map(program => ({
+    ...program,
+    desc: contentValue(`program-${program.id}-description`, program.desc),
+  }));
   useEffect(() => {
     const el = revealRef.current;
     if (!el) return;
@@ -143,10 +151,10 @@ export default function Programs() {
         <div className="relative z-10 text-center text-white pt-16">
           <p className="text-xs text-white/60 mb-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>Home &rsaquo; Programs</p>
           <h1 className="text-4xl md:text-5xl font-extrabold" style={{ fontFamily: "Manrope, sans-serif" }}>
-            Our <span className="text-[#EE701E]">Programs</span>
+            {contentValue("hero-prefix", "Our")} <span className="text-[#EE701E]">{contentValue("hero-highlight", "Programs")}</span>
           </h1>
           <p className="text-white/70 mt-3 max-w-xl mx-auto px-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-            Holistic, evidence-based programs that address every barrier between a child and quality education.
+            {contentValue("hero-intro", "Holistic, evidence-based programs that address every barrier between a child and quality education.")}
           </p>
         </div>
       </section>
@@ -154,7 +162,7 @@ export default function Programs() {
       {/* Programs List */}
       <section className="py-20 bg-[#F8F9FA]">
         <div className="container mx-auto space-y-20">
-          {programs.map(({ id, icon: Icon, title, subtitle, color, img, desc, outcomes, details }, i) => (
+          {programItems.map(({ id, icon: Icon, title, subtitle, color, img, desc, outcomes, details }, i) => (
             <div
               key={id}
               className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center fade-up ${i % 2 === 1 ? "lg:flex-row-reverse" : ""}`}
@@ -205,10 +213,10 @@ export default function Programs() {
           <p className="section-label text-[#EE701E] fade-up">Working Together</p>
           <span className="orange-underline mx-auto" />
           <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-5 fade-up stagger-2" style={{ fontFamily: "Manrope, sans-serif" }}>
-            Community Partnerships
+            {contentValue("partnerships-title", "Community Partnerships")}
           </h2>
           <p className="text-white/70 max-w-2xl mx-auto mb-10 fade-up stagger-3" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-            Our programs succeed because we work hand-in-hand with local schools, community leaders, families, and government agencies. Sustainable change requires deep community ownership.
+            {contentValue("partnerships-body", "Our programs succeed because we work hand-in-hand with local schools, community leaders, families, and government agencies. Sustainable change requires deep community ownership.")}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 fade-up stagger-4">
             {["Local Schools & Teachers", "Community Leaders", "Government Agencies", "International Donors", "Local Businesses", "Faith Communities"].map((partner) => (
@@ -224,10 +232,10 @@ export default function Programs() {
       <section className="py-16 bg-[#EE701E]">
         <div className="container mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-4 fade-up" style={{ fontFamily: "Manrope, sans-serif" }}>
-            Help Fund Our Programs
+            {contentValue("cta-title", "Help Fund Our Programs")}
           </h2>
           <p className="text-white/80 mb-6 fade-up stagger-2" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-            Your donation directly supports these life-changing programs for vulnerable children.
+            {contentValue("cta-body", "Your donation directly supports these life-changing programs for vulnerable children.")}
           </p>
           <Link href="/donate" className="inline-block bg-white text-[#EE701E] font-bold px-8 py-3 rounded-lg hover:bg-[#0D215C] hover:text-white transition-all duration-200 active:scale-[0.97] fade-up stagger-3" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
             Donate Now

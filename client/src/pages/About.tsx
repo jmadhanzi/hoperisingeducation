@@ -1,11 +1,12 @@
 /* Hope Rising Education — About Page */
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link } from "wouter";
 import { Target, Eye, Heart, Globe, Shield, Users, CheckCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 import { HOPE_RISING_MEDIA } from "@/lib/media";
+import { trpc } from "@/lib/trpc";
 
 const ABOUT_HERO = HOPE_RISING_MEDIA.classroomLineup;
 
@@ -27,6 +28,11 @@ const milestones = [
 ];
 
 export default function About() {
+  const { data: aboutContent } = trpc.content.pageContent.useQuery({ page: "about" });
+  const aboutIntro = useMemo(
+    () => aboutContent?.find(block => block.contentKey === "intro")?.value || "Hope Rising Education is a community-focused nonprofit dedicated to improving educational outcomes for underserved children and families. We provide tutoring, mentorship, and resource support alongside teacher training.",
+    [aboutContent],
+  );
   const revealRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = revealRef.current;
@@ -73,7 +79,7 @@ export default function About() {
                 Founded in Zimbabwe, Fuelled by Hope
               </h2>
               <p className="text-[#584237] leading-relaxed mb-4" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
-                Hope Rising Education is a community-focused nonprofit dedicated to improving educational outcomes for underserved children and families. We provide tutoring, mentorship, and resource support alongside teacher training.
+                {aboutIntro}
               </p>
               <p className="text-[#584237] leading-relaxed mb-6" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
                 Founded in Zimbabwe, our programs address the root causes of educational inequality — poverty, lack of resources, and inadequate psycho-social support — with holistic, evidence-based interventions.

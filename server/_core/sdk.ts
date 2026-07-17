@@ -6,6 +6,7 @@ import type { Request } from "express";
 import { SignJWT, jwtVerify } from "jose";
 import type { User } from "../../drizzle/schema";
 import * as db from "../db";
+import { isApprovedAdministratorEmail } from "../authz";
 import { ENV } from "./env";
 import type {
   ExchangeTokenRequest,
@@ -303,10 +304,16 @@ class SDKServer {
 
     await db.upsertUser({
       openId: user.openId,
+      // Promote the configured administrator only when the managed profile's
+      // already-stored email matches the server-side allowlist.
+      ...(isApprovedAdministratorEmail(user.email) ? { role: "admin" as const } : {}),
       lastSignedIn: signedInAt,
     });
 
-    return user;
+    return {
+      ...user,
+      role: isApprovedAdministratorEmail(user.email) ? "admin" : user.role,
+    };
   }
 }
 
