@@ -159,21 +159,19 @@ export default function Navbar() {
                 My Donations
               </Link>
             )}
-            {user?.role === "admin" && (
-              <Link
-                href="/admin"
-                aria-current={location.startsWith("/admin") ? "page" : undefined}
-                className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-md border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0D215C] ${
-                  location.startsWith("/admin")
-                    ? "border-[#EE701E] text-[#EE701E] bg-[#EE701E]/10"
-                    : "border-white/30 text-white/90 hover:border-[#EE701E] hover:text-[#EE701E] hover:bg-[#EE701E]/10"
-                }`}
-                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-              >
-                <ShieldCheck className="w-4 h-4" aria-hidden="true" />
-                Admin
-              </Link>
-            )}
+            <Link
+              href="/admin"
+              aria-current={location.startsWith("/admin") ? "page" : undefined}
+              className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-md border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EE701E] focus-visible:ring-offset-1 focus-visible:ring-offset-[#0D215C] ${
+                location.startsWith("/admin")
+                  ? "border-[#EE701E] text-[#EE701E] bg-[#EE701E]/10"
+                  : "border-white/30 text-white/90 hover:border-[#EE701E] hover:text-[#EE701E] hover:bg-[#EE701E]/10"
+              }`}
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              <ShieldCheck className="w-4 h-4" aria-hidden="true" />
+              Admin
+            </Link>
             <Link href="/donate" className="btn-primary text-xs py-2.5">
               Donate Now
             </Link>
@@ -229,21 +227,19 @@ export default function Navbar() {
                 My Donations
               </Link>
             )}
-            {user?.role === "admin" && (
-              <Link
-                href="/admin"
-                aria-current={location.startsWith("/admin") ? "page" : undefined}
-                className={`px-4 py-3 text-sm font-semibold rounded-lg transition-colors flex items-center gap-2 ${
-                  location.startsWith("/admin")
-                    ? "text-[#EE701E] bg-[#EE701E]/10"
-                    : "text-white/90 hover:text-[#EE701E] hover:bg-[#EE701E]/10"
-                }`}
-                style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
-              >
-                <ShieldCheck className="w-4 h-4" aria-hidden="true" />
-                Admin Dashboard
-              </Link>
-            )}
+            <Link
+              href="/admin"
+              aria-current={location.startsWith("/admin") ? "page" : undefined}
+              className={`px-4 py-3 text-sm font-semibold rounded-lg transition-colors flex items-center gap-2 ${
+                location.startsWith("/admin")
+                  ? "text-[#EE701E] bg-[#EE701E]/10"
+                  : "text-white/90 hover:text-[#EE701E] hover:bg-[#EE701E]/10"
+              }`}
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              <ShieldCheck className="w-4 h-4" aria-hidden="true" />
+              Admin Dashboard
+            </Link>
             <div className="pt-3 border-t border-white/10 mt-2">
               <Link href="/donate" className="btn-primary block text-center text-xs py-3">
                 Donate Now

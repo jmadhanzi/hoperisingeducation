@@ -3,7 +3,7 @@
  * Social: Facebook, Instagram, Twitter/X, TikTok, YouTube
  */
 import { Link } from "wouter";
-import { MapPin, Mail, Phone, Facebook, Instagram, Twitter, Youtube, Globe } from "lucide-react";
+import { MapPin, Mail, Phone, Facebook, Instagram, Twitter, Youtube, Globe, ShieldCheck } from "lucide-react";
 
 // TikTok SVG icon (not in lucide-react)
 function TikTokIcon({ className }: { className?: string }) {
@@ -125,6 +125,7 @@ export default function Footer() {
                 { href: "/team", label: "Our Team" },
                 { href: "/get-involved", label: "Get Involved" },
                 { href: "/blog", label: "Blog & Stories" },
+                { href: "/admin", label: "Admin Dashboard" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -225,7 +226,7 @@ export default function Footer() {
           >
             © {new Date().getFullYear()} Hope Rising Education. All rights reserved.
           </p>
-          <div className="flex gap-5">
+          <div className="flex gap-5 items-center">
             <Link
               href="/privacy"
               className="text-white/50 hover:text-white/80 text-xs transition-colors"
@@ -246,6 +247,14 @@ export default function Footer() {
               style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
             >
               FAQ
+            </Link>
+            <Link
+              href="/admin"
+              className="flex items-center gap-1 text-[#EE701E]/70 hover:text-[#EE701E] text-xs transition-colors font-semibold"
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
+              Admin
             </Link>
           </div>
         </div>
