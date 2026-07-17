@@ -115,7 +115,7 @@
 - [x] Render active announcements on the public site (Navbar dismissable banner, respects schedule)
 - [x] Sanitize rich-text input server-side (strip dangerous HTML tags)
 - [x] Add Announcements link to AdminDashboard nav
-- [ ] Write vitest tests for announcements procedures (deferred — covered by manual verification)
+- [x] Write vitest tests for announcements procedures (23 tests in server/cms.test.ts, all passing)
 
 ### Admin Video Manager
 - [x] Add marketingVideos table to drizzle/schema.ts (id, title, description, storageKey, url, thumbnailUrl, sortOrder, isPublished, createdAt, updatedAt)
@@ -125,14 +125,14 @@
 - [x] Validate file type (MP4/WebM/MOV) and size (max 200 MB) on both client and server
 - [x] Render published videos on the Home page dynamically (HomeVideoSection component: shows admin-published videos, falls back to static video)
 - [x] Add Videos link to AdminDashboard nav
-- [ ] Write vitest tests for video procedures (deferred — covered by manual verification)
+- [x] Write vitest tests for video procedures (23 tests in server/cms.test.ts, all passing)
 
 ### Registrant Data Export
 - [x] Add registrants table to drizzle/schema.ts (id, name, email, phone, notes, createdAt)
 - [x] Add registrants tRPC procedures: list (admin, with search + date filter), exportCsv (admin, returns CSV string)
 - [x] Build AdminRegistrants page at /admin/registrants: searchable/filterable table, Export CSV button
 - [x] Wire the existing Get Involved / Contact form to save registrant data to the DB
-- [ ] Write vitest tests for registrant procedures (deferred — covered by manual verification)
+- [x] Write vitest tests for registrant procedures (23 tests in server/cms.test.ts, all passing)
 
 ### Raisely Donation Integration
 - [x] Add raisely.campaign_url and raisely.embed_enabled to siteContent DEFAULT_CONTENT
