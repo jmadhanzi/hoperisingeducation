@@ -24,8 +24,7 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { PageSEO } from "@/lib/seo";
 
-const DONATE_IMG =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
+const DONATE_IMG = "/manus-storage/hope-rising-community-event_505de7c9.jpg";
 
 // Maps donation amount (dollars) to a human impact description
 const IMPACT_MAP: { min: number; max: number; label: string; icon: typeof BookOpen }[] = [

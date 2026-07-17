@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 
-const CURRICULUM_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp";
+const CURRICULUM_IMG = "/manus-storage/hope-rising-classroom_629dc9e0.jpg";
 
 const programs = [
   {
@@ -32,7 +32,7 @@ const programs = [
     title: "School Fees & Supplies",
     subtitle: "Financial Support",
     color: "#0D215C",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
+    img: "/manus-storage/hope-rising-school-uniforms_55ce0f8c.jpg",
     desc: "Financial barriers are the primary reason children drop out of school in Zimbabwe. We cover school fees, uniforms, textbooks, stationery, and other essential supplies so no child is left behind.",
     outcomes: [
       "Zero financial barriers to school enrollment",
@@ -49,7 +49,7 @@ const programs = [
     title: "Tutoring & Mentorship",
     subtitle: "Academic Support",
     color: "#4BAF4F",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
+    img: "/manus-storage/hope-rising-community-event_505de7c9.jpg",
     desc: "One-on-one and small-group tutoring sessions help children who are falling behind catch up with their peers. Dedicated mentors provide consistent guidance and encouragement throughout the school year.",
     outcomes: [
       "Improved grades across core subjects",
@@ -66,7 +66,7 @@ const programs = [
     title: "Nutrition & Meals",
     subtitle: "Health & Wellbeing",
     color: "#EE701E",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp",
+    img: "/manus-storage/hope-rising-food-aid_2b38b59d.jpg",
     desc: "Hunger is a significant barrier to learning. We provide warm, nutritious meals daily to children in our programs, ensuring they have the energy and focus needed to engage fully in their education.",
     outcomes: [
       "Improved concentration and classroom engagement",
@@ -83,7 +83,7 @@ const programs = [
     title: "Psycho-Social Support",
     subtitle: "Mental Health",
     color: "#0D215C",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp",
+    img: "/manus-storage/hope-rising-girl-pencils_da51bebd.jpg",
     desc: "Many children in our communities have experienced trauma, loss, or significant stress. Our trained counselors and safe spaces provide the emotional support children need to heal and thrive.",
     outcomes: [
       "Reduced symptoms of anxiety and depression",
@@ -100,7 +100,7 @@ const programs = [
     title: "Safe Learning Environments",
     subtitle: "Infrastructure",
     color: "#4BAF4F",
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
+    img: "/manus-storage/hope-rising-books-distribution_8632b079.jpg",
     desc: "We build and maintain safe, welcoming classrooms and learning spaces equipped with the tools children need to thrive. A safe environment is the foundation of effective learning.",
     outcomes: [
       "Fully equipped classrooms with furniture and materials",

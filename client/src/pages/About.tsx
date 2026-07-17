@@ -6,7 +6,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 
-const ABOUT_HERO = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp";
+const ABOUT_HERO = "/manus-storage/hope-rising-group-tshirts_f9863d83.jpg";
+const ABOUT_FOOD_AID = "/manus-storage/hope-rising-food-aid_2b38b59d.jpg";
+const ABOUT_GIRL = "/manus-storage/hope-rising-girl-pencils_da51bebd.jpg";
 
 const values = [
   { icon: Heart, title: "Compassion", desc: "We lead with empathy, treating every child with dignity and care." },
@@ -86,22 +88,11 @@ export default function About() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 fade-up stagger-2">
-              {[
-                { icon: Heart, title: "Give Donation", desc: "Your gift transforms lives; invest in a child's future today.", color: "#EE701E" },
-                { icon: Users, title: "Become Volunteer", desc: "Lend your time and skills; empower a child to thrive.", color: "#0D215C" },
-                { icon: Target, title: "Fund Raising", desc: "Rally support, raise resources, and fuel lasting change.", color: "#4BAF4F" },
-                { icon: Globe, title: "Global Reach", desc: "Operating in Zimbabwe and expanding to underserved communities worldwide.", color: "#EE701E" },
-              ].map(({ icon: Icon, title, desc, color }) => (
-                <div key={title} className="bg-[#F8F9FA] rounded-2xl p-5 card-shadow">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ backgroundColor: color + "20" }}>
-                    <Icon className="w-5 h-5" style={{ color }} />
-                  </div>
-                  <h4 className="font-bold text-[#0D215C] text-sm mb-1" style={{ fontFamily: "Manrope, sans-serif" }}>{title}</h4>
-                  <p className="text-[#584237] text-xs leading-relaxed" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>{desc}</p>
-                </div>
-              ))}
+            <div className="relative fade-up stagger-2">
+              <img src={ABOUT_FOOD_AID} alt="Hope Rising Education — food aid distribution to school children in Zimbabwe" className="w-full rounded-2xl object-cover h-72 mb-4" loading="lazy" />
+              <img src={ABOUT_GIRL} alt="A young girl in school uniform holding pencils received from Hope Rising Education" className="w-full rounded-2xl object-cover h-56" loading="lazy" />
             </div>
+
           </div>
         </div>
       </section>

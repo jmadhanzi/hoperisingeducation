@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 
-const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
+const IMPACT_IMG = "/manus-storage/hope-rising-pencils-books_1028d791.jpg";
 
 const stats = [
   { value: 500, suffix: "+", label: "Children Supported", icon: Users, color: "#EE701E" },

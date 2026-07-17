@@ -93,3 +93,14 @@
 - [x] Support drag-and-drop upload directly inside the MediaPickerModal (reuse existing upload logic)
 - [x] Write vitest tests for the media picker integration
 - [x] Checkpoint and push to GitHub
+
+## Authentic Real Images Implementation
+- [x] Copy all 8 photos + 1 video to /home/ubuntu/webdev-static-assets/ and upload with manus-upload-file --webdev
+- [x] Replace hero background on Home page with children-in-classroom image (hope-rising-classroom)
+- [x] Replace About page hero with group-tshirts photo; Who We Are section shows food-aid + girl-pencils photos
+- [x] Replace Programs page images with authentic photos (classroom, school-uniforms, community-event, food-aid, girl-pencils, books-distribution)
+- [x] Replace Impact page hero with pencils-books photo
+- [x] Replace Donate page hero with community-event photo
+- [x] Embed the video on the Home page in a dedicated "See Our Work in Action" section
+- [x] Update blog post cover images with real Hope Rising photos
+- [x] Checkpoint and push to GitHub

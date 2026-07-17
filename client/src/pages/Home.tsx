@@ -9,9 +9,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
 
-const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp";
-const DONATE_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/donate-cta-LxpaJsEwFJpap6SNuPu4Uk.webp";
-const IMPACT_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/impact-community-9JKJKbn55EKeiTF8riwSiE.webp";
+const HERO_IMG = "/manus-storage/hope-rising-classroom_629dc9e0.jpg";
+const DONATE_IMG = "/manus-storage/hope-rising-community-event_505de7c9.jpg";
+const IMPACT_IMG = "/manus-storage/hope-rising-group-tshirts_f9863d83.jpg";
 
 const stats = [
   { value: "500+", label: "Children Supported", icon: Users },
@@ -66,7 +66,7 @@ const projects = [
     desc: "Delivering books and safe learning spaces to children across Chiredzi and Chipinge.",
     goal: 5000,
     raised: 3750,
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/hero-children-E3Zp4N9BdqMr2BPpEu4Yxq.webp",
+    img: "/manus-storage/hope-rising-books-distribution_8632b079.jpg",
   },
   {
     title: "Tools for Success",
@@ -74,7 +74,7 @@ const projects = [
     desc: "Providing every pencil, notebook, and eraser needed for a brighter future.",
     goal: 2500,
     raised: 1250,
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/programs-curriculum-FzuxWRHqHKijJqsiRDbhP3.webp",
+    img: "/manus-storage/hope-rising-pencils-books_1028d791.jpg",
   },
   {
     title: "Build a School",
@@ -82,7 +82,7 @@ const projects = [
     desc: "A bold effort to build a safe, welcoming school that will give local children reliable access to education.",
     goal: 100000,
     raised: 65000,
-    img: "https://d2xsxph8kpxj0f.cloudfront.net/310519663208076335/8TaPKuh8NEV6zjk5GTYvjo/about-hero-grgup9TxqUp4zyBtBuCgak.webp",
+    img: "/manus-storage/hope-rising-school-uniforms_55ce0f8c.jpg",
   },
 ];
 
@@ -406,8 +406,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── DONATE CTA ── */}
+      {/* ── VIDEO SECTION ── */}
       <section className="py-20 bg-[#F8F9FA]">
+        <div className="container mx-auto">
+          <div className="text-center mb-12 fade-up">
+            <p className="section-label">See Our Work in Action</p>
+            <span className="orange-underline mx-auto" />
+            <h2
+              className="text-3xl md:text-4xl font-extrabold text-[#0D215C]"
+              style={{ fontFamily: "Manrope, sans-serif" }}
+            >
+              Hope Rising in Zimbabwe
+            </h2>
+            <p
+              className="text-[#584237] mt-4 max-w-2xl mx-auto"
+              style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+            >
+              Watch how your support transforms the lives of children and families in Chiredzi and Chipinge.
+            </p>
+          </div>
+          <div className="max-w-4xl mx-auto fade-up stagger-2">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl" style={{ aspectRatio: "16/9" }}>
+              <video
+                src="/manus-storage/hope-rising-video_b8dba4f3.mp4"
+                controls
+                preload="metadata"
+                poster="/manus-storage/hope-rising-community-event_505de7c9.jpg"
+                className="w-full h-full object-cover"
+                aria-label="Hope Rising Education — video showing our work with children in Zimbabwe"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── DONATE CTA ── */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto">
           <div className="bg-[#0D215C] rounded-3xl overflow-hidden relative">
             <div className="absolute inset-0">
