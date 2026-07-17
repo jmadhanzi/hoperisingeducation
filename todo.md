@@ -123,7 +123,7 @@
 - [x] Add videos tRPC procedures: list (public, published only), listAll (admin), upload (admin, multipart), update (admin), reorder (admin), togglePublish (admin), delete (admin)
 - [x] Build AdminVideos page at /admin/videos: drag-drop upload with progress bar, title/description fields, reorder handles, publish toggle, delete
 - [x] Validate file type (MP4/WebM/MOV) and size (max 200 MB) on both client and server
-- [ ] Render published videos on the Home page dynamically (currently static video; future enhancement)
+- [x] Render published videos on the Home page dynamically (HomeVideoSection component: shows admin-published videos, falls back to static video)
 - [x] Add Videos link to AdminDashboard nav
 - [ ] Write vitest tests for video procedures (deferred — covered by manual verification)
 
@@ -140,7 +140,7 @@
 - [x] Add RaiselyEmbed component to Donate page (reads URL from siteContent, renders iframe, lazy-loaded)
 - [x] raisely.campaign_url is now editable in AdminContent editor (Donations section)
 - [x] Navbar Donate Now button links to /donate page which contains the Raisely embed
-- [ ] Document Raisely dashboard settings user must configure manually (in ADMIN_HANDOFF.md)
+- [x] Document Raisely dashboard settings user must configure manually (in ADMIN_HANDOFF.md)
 
 ### Handoff Document
 - [x] Write ADMIN_HANDOFF.md covering: login, video upload, announcements, CSV export, Raisely URL config, Raisely dashboard settings

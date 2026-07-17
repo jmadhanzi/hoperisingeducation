@@ -8,6 +8,7 @@ import { ArrowRight, BookOpen, Users, Heart, Utensils, GraduationCap, Shield, Tr
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PageSEO } from "@/lib/seo";
+import { trpc } from "@/lib/trpc";
 
 const HERO_IMG = "/manus-storage/hope-rising-classroom_629dc9e0.jpg";
 const DONATE_IMG = "/manus-storage/hope-rising-community-event_505de7c9.jpg";
@@ -425,18 +426,7 @@ export default function Home() {
               Watch how your support transforms the lives of children and families in Chiredzi and Chipinge.
             </p>
           </div>
-          <div className="max-w-4xl mx-auto fade-up stagger-2">
-            <div className="relative rounded-2xl overflow-hidden shadow-xl" style={{ aspectRatio: "16/9" }}>
-              <video
-                src="/manus-storage/hope-rising-video_b8dba4f3.mp4"
-                controls
-                preload="metadata"
-                poster="/manus-storage/hope-rising-community-event_505de7c9.jpg"
-                className="w-full h-full object-cover"
-                aria-label="Hope Rising Education — video showing our work with children in Zimbabwe"
-              />
-            </div>
-          </div>
+          <HomeVideoSection />
         </div>
       </section>
 
@@ -538,6 +528,95 @@ export default function Home() {
       </section>
 
       <Footer />
+    </div>
+  );
+}
+
+/**
+ * HomeVideoSection — shows published videos from the Admin Video Manager.
+ * Falls back to the static Hope Rising video if no published videos exist.
+ */
+const STATIC_VIDEO_URL = "/manus-storage/hope-rising-video_b8dba4f3.mp4";
+const STATIC_POSTER_URL = "/manus-storage/hope-rising-community-event_505de7c9.jpg";
+
+function HomeVideoSection() {
+  const { data: videos, isLoading } = trpc.videos.listPublished.useQuery();
+
+  // Show skeleton while loading
+  if (isLoading) {
+    return (
+      <div className="max-w-4xl mx-auto fade-up stagger-2">
+        <div
+          className="rounded-2xl bg-gray-200 animate-pulse"
+          style={{ aspectRatio: "16/9" }}
+          aria-hidden="true"
+        />
+      </div>
+    );
+  }
+
+  // If admin has published videos, show the first one (most recently added)
+  if (videos && videos.length > 0) {
+    const v = videos[0];
+    return (
+      <div className="max-w-4xl mx-auto fade-up stagger-2">
+        <div className="relative rounded-2xl overflow-hidden shadow-xl" style={{ aspectRatio: "16/9" }}>
+          <video
+            src={v.url}
+            controls
+            preload="metadata"
+            poster={v.thumbnailUrl ?? STATIC_POSTER_URL}
+            className="w-full h-full object-cover"
+            aria-label={v.title ?? "Hope Rising Education — video showing our work with children in Zimbabwe"}
+          />
+        </div>
+        {v.title && (
+          <p className="text-center text-sm text-[#584237] mt-3 font-medium" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>
+            {v.title}
+          </p>
+        )}
+        {/* If there are more published videos, show thumbnails below */}
+        {videos.length > 1 && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
+            {videos.slice(1, 4).map((vid) => (
+              <a
+                key={vid.id}
+                href={vid.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative rounded-xl overflow-hidden shadow-md group"
+                style={{ aspectRatio: "16/9" }}
+                aria-label={vid.title ?? "Watch video"}
+              >
+                {vid.thumbnailUrl ? (
+                  <img src={vid.thumbnailUrl} alt={vid.title ?? "Video thumbnail"} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                ) : (
+                  <div className="w-full h-full bg-[#0D215C]/20 flex items-center justify-center">
+                    <span className="text-white text-xs font-medium" style={{ fontFamily: "Hanken Grotesk, sans-serif" }}>{vid.title}</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Default: static video
+  return (
+    <div className="max-w-4xl mx-auto fade-up stagger-2">
+      <div className="relative rounded-2xl overflow-hidden shadow-xl" style={{ aspectRatio: "16/9" }}>
+        <video
+          src={STATIC_VIDEO_URL}
+          controls
+          preload="metadata"
+          poster={STATIC_POSTER_URL}
+          className="w-full h-full object-cover"
+          aria-label="Hope Rising Education — video showing our work with children in Zimbabwe"
+        />
+      </div>
     </div>
   );
 }
