@@ -144,3 +144,19 @@
 
 ### Handoff Document
 - [x] Write ADMIN_HANDOFF.md covering: login, video upload, announcements, CSV export, Raisely URL config, Raisely dashboard settings
+
+## Multi-Campaign Fundraising System
+- [x] Add `campaigns` table to drizzle/schema.ts (id, title, slug, description, coverImageUrl, goalAmount, raisedAmount, currency, donateUrl, isActive, isFeatured, deadline, sortOrder, createdAt, updatedAt)
+- [x] Run pnpm db:push to migrate schema
+- [x] Create server/routers/campaigns.ts with listActive (public), listAll/create/update/delete/updateRaised (admin)
+- [x] Register campaigns router in server/routers.ts
+- [x] Build AdminCampaigns page at /admin/campaigns: list all campaigns, create/edit form, delete, active toggle, featured toggle
+- [x] Add AdminCampaigns link to AdminDashboard nav
+- [x] Add lazy route for AdminCampaigns in App.tsx
+- [x] Build public Campaigns page at /campaigns: grid of active campaigns with cover image, progress bar, raised/goal amounts, deadline countdown, Donate button
+- [x] Add Campaigns link to Navbar and Footer
+- [x] Add lazy route for Campaigns in App.tsx
+- [x] Add Featured Campaigns section to Home page (shows up to 3 featured campaigns)
+- [x] Seed 5 sample campaigns in the database
+- [x] Write vitest tests for campaigns router (81 tests passing, TypeScript clean)
+- [x] Save checkpoint

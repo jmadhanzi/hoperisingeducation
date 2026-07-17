@@ -33,6 +33,8 @@ const Terms        = lazy(() => import("./pages/Terms"));
 const AdminAnnouncements = lazy(() => import("./pages/AdminAnnouncements"));
 const AdminVideos  = lazy(() => import("./pages/AdminVideos"));
 const AdminRegistrants = lazy(() => import("./pages/AdminRegistrants"));
+const Campaigns        = lazy(() => import("./pages/Campaigns"));
+const AdminCampaigns   = lazy(() => import("./pages/AdminCampaigns"));
 
 // Minimal page-level loading skeleton — maintains layout while chunks download
 function PageLoader() {
@@ -70,6 +72,8 @@ function Router() {
         <Route path="/admin/announcements" component={AdminAnnouncements} />
         <Route path="/admin/videos" component={AdminVideos} />
         <Route path="/admin/registrants" component={AdminRegistrants} />
+        <Route path="/campaigns" component={Campaigns} />
+        <Route path="/admin/campaigns" component={AdminCampaigns} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/terms" component={Terms} />
         <Route path="/404" component={NotFound} />

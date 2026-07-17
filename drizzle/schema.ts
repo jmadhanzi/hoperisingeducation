@@ -216,3 +216,42 @@ export const registrants = mysqlTable("registrants", {
 
 export type Registrant = typeof registrants.$inferSelect;
 export type InsertRegistrant = typeof registrants.$inferInsert;
+
+/**
+ * Fundraising campaigns — multiple simultaneous campaigns each with
+ * their own goal, progress tracking, deadline, cover image, and donate URL.
+ * Amounts stored in cents to avoid floating-point issues.
+ */
+export const campaigns = mysqlTable("campaigns", {
+  id: int("id").autoincrement().primaryKey(),
+  /** URL-safe slug, e.g. "school-fees-2025" */
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  title: varchar("title", { length: 255 }).notNull(),
+  /** Short summary shown on campaign cards */
+  excerpt: text("excerpt"),
+  /** Full description shown on campaign detail / modal */
+  description: text("description"),
+  /** Cover image URL (from media library or external) */
+  coverImageUrl: text("coverImageUrl"),
+  /** Fundraising target in cents, e.g. 1000000 = $10,000 */
+  goalCents: int("goalCents").notNull().default(0),
+  /** Amount raised so far in cents — updated manually or via webhook */
+  raisedCents: int("raisedCents").notNull().default(0),
+  /** ISO 4217 currency code, e.g. "USD" */
+  currency: varchar("currency", { length: 3 }).notNull().default("USD"),
+  /** External donation URL (Raisely, PayPal, etc.) */
+  donateUrl: text("donateUrl"),
+  /** Optional campaign end date */
+  deadline: timestamp("deadline"),
+  /** Whether this campaign is visible on the public site */
+  isActive: boolean("isActive").notNull().default(true),
+  /** Whether to feature this campaign on the Home page */
+  isFeatured: boolean("isFeatured").notNull().default(false),
+  /** Lower number = shown first */
+  sortOrder: int("sortOrder").notNull().default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = typeof campaigns.$inferInsert;

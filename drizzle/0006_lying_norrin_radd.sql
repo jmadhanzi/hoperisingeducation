@@ -1,0 +1,20 @@
+CREATE TABLE `campaigns` (
+	`id` int AUTO_INCREMENT NOT NULL,
+	`slug` varchar(255) NOT NULL,
+	`title` varchar(255) NOT NULL,
+	`excerpt` text,
+	`description` text,
+	`coverImageUrl` text,
+	`goalCents` int NOT NULL DEFAULT 0,
+	`raisedCents` int NOT NULL DEFAULT 0,
+	`currency` varchar(3) NOT NULL DEFAULT 'USD',
+	`donateUrl` text,
+	`deadline` timestamp,
+	`isActive` boolean NOT NULL DEFAULT true,
+	`isFeatured` boolean NOT NULL DEFAULT false,
+	`sortOrder` int NOT NULL DEFAULT 0,
+	`createdAt` timestamp NOT NULL DEFAULT (now()),
+	`updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
+	CONSTRAINT `campaigns_id` PRIMARY KEY(`id`),
+	CONSTRAINT `campaigns_slug_unique` UNIQUE(`slug`)
+);

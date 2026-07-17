@@ -11,6 +11,7 @@ import { contactRouter } from "./routers/contact";
 import { announcementsRouter } from "./routers/announcements";
 import { videosRouter } from "./routers/videos";
 import { registrantsRouter } from "./routers/registrants";
+import { campaignsRouter } from "./routers/campaigns";
 
 export const appRouter = router({
   system: systemRouter,
@@ -33,6 +34,7 @@ export const appRouter = router({
   announcements: announcementsRouter,
   videos: videosRouter,
   registrants: registrantsRouter,
+  campaigns: campaignsRouter,
 });
 
 export type AppRouter = typeof appRouter;

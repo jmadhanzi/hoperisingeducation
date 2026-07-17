@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/programs", label: "Programs" },
+  { href: "/campaigns", label: "Campaigns" },
   { href: "/impact", label: "Impact" },
   { href: "/team", label: "Team" },
   { href: "/get-involved", label: "Get Involved" },

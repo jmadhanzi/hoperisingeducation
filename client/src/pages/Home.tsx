@@ -430,6 +430,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── FEATURED CAMPAIGNS ── */}
+      <FeaturedCampaigns />
+
       {/* ── DONATE CTA ── */}
       <section className="py-20 bg-white">
         <div className="container mx-auto">
@@ -618,5 +621,146 @@ function HomeVideoSection() {
         />
       </div>
     </div>
+  );
+}
+
+/**
+ * FeaturedCampaigns — shows up to 3 featured active campaigns on the Home page.
+ * Only rendered when at least one featured campaign exists.
+ */
+function FeaturedCampaigns() {
+  const { data: campaigns = [], isLoading } = trpc.campaigns.getFeatured.useQuery();
+
+  // Don't render the section if no featured campaigns exist
+  if (!isLoading && campaigns.length === 0) return null;
+
+  function centsToDisplay(cents: number, currency = "USD") {
+    return new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(cents / 100);
+  }
+
+  function progressPct(raised: number, goal: number) {
+    if (goal <= 0) return 0;
+    return Math.min(100, Math.round((raised / goal) * 100));
+  }
+
+  return (
+    <section className="py-20 bg-[#F8F9FA]">
+      <div className="container mx-auto">
+        {/* Section header */}
+        <div className="text-center mb-12 fade-up">
+          <p className="section-label">Active Fundraising</p>
+          <span className="orange-underline mx-auto" />
+          <h2
+            className="text-3xl md:text-4xl font-extrabold text-[#0D215C] mt-4 mb-4"
+            style={{ fontFamily: "Manrope, sans-serif" }}
+          >
+            Support a Campaign
+          </h2>
+          <p
+            className="text-[#584237] text-lg max-w-2xl mx-auto"
+            style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+          >
+            Choose a cause and make a direct, measurable impact for children in Zimbabwe.
+          </p>
+        </div>
+
+        {/* Campaign cards */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                <div className="h-44 bg-gray-200" />
+                <div className="p-6 space-y-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4" />
+                  <div className="h-3 bg-gray-200 rounded w-full" />
+                  <div className="h-2 bg-gray-200 rounded-full" />
+                  <div className="h-10 bg-gray-200 rounded-lg" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {campaigns.map((c) => {
+              const pct = progressPct(c.raisedCents, c.goalCents);
+              return (
+                <div
+                  key={c.id}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col border border-gray-100 group"
+                >
+                  {/* Cover */}
+                  <div className="relative h-44 overflow-hidden shrink-0">
+                    {c.coverImageUrl ? (
+                      <img
+                        src={c.coverImageUrl}
+                        alt={c.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#0D215C] to-[#1a3a8f] flex items-center justify-center">
+                        <Heart className="w-10 h-10 text-white/30" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3
+                      className="font-bold text-[#0D215C] text-base leading-tight mb-2 line-clamp-2"
+                      style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+                    >
+                      {c.title}
+                    </h3>
+                    {c.excerpt && (
+                      <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-2 flex-1">
+                        {c.excerpt}
+                      </p>
+                    )}
+
+                    {/* Progress */}
+                    <div className="mb-4">
+                      <div className="flex justify-between text-xs text-gray-600 mb-1.5">
+                        <span className="font-bold text-[#EE701E]">{centsToDisplay(c.raisedCents, c.currency)}</span>
+                        <span>of {centsToDisplay(c.goalCents, c.currency)}</span>
+                      </div>
+                      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-[#EE701E] to-[#f59340] rounded-full"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <div className="text-right text-xs text-gray-400 mt-0.5">{pct}% funded</div>
+                    </div>
+
+                    {/* CTA */}
+                    <a
+                      href={c.donateUrl ?? "/donate"}
+                      target={c.donateUrl ? "_blank" : undefined}
+                      rel={c.donateUrl ? "noopener noreferrer" : undefined}
+                      className="mt-auto"
+                    >
+                      <button className="w-full bg-[#EE701E] hover:bg-[#d4611a] text-white font-semibold text-sm py-2.5 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2">
+                        <Heart className="w-4 h-4" />
+                        Donate to This Campaign
+                      </button>
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* View all campaigns link */}
+        <div className="text-center mt-10">
+          <Link
+            href="/campaigns"
+            className="inline-flex items-center gap-2 text-[#EE701E] font-semibold hover:underline text-base"
+            style={{ fontFamily: "Hanken Grotesk, sans-serif" }}
+          >
+            View All Campaigns <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </section>
   );
 }

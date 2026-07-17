@@ -121,6 +121,7 @@ export default function Footer() {
                 { href: "/", label: "Home" },
                 { href: "/about", label: "About Us" },
                 { href: "/programs", label: "Programs" },
+                { href: "/campaigns", label: "Campaigns" },
                 { href: "/impact", label: "Our Impact" },
                 { href: "/team", label: "Our Team" },
                 { href: "/get-involved", label: "Get Involved" },

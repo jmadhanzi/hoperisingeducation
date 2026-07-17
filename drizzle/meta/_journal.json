@@ -43,6 +43,13 @@
       "when": 1784312078627,
       "tag": "0005_tan_sentry",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1784314295043,
+      "tag": "0006_lying_norrin_radd",
+      "breakpoints": true
     }
   ]
 }
